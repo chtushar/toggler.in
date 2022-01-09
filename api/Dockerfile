@@ -12,4 +12,4 @@ RUN go build
 
 EXPOSE 9090
 
-CMD ["./toggler-in-api"]
+RUN go run .
