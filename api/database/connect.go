@@ -36,6 +36,7 @@ func ConnectDB() {
 		Path:   dbName,
 	}
 
+	// Connect to the Database
 	DB, err = gorm.Open(postgres.Open(dsn.String()), &gorm.Config{})
 
 	if err != nil {

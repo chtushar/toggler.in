@@ -1,8 +1,5 @@
 build:
-	go build main.go
+	go build -o api main.go
 
 run: build
 	./api
-
-watch:
-	reflex -s -r '\.go$' make run
