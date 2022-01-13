@@ -9,6 +9,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"toggler.in/api/config"
+	"toggler.in/api/model"
 )
 
 // Declare the variable for the database
@@ -42,6 +43,8 @@ func ConnectDB() {
 	if err != nil {
 		panic("failed to connect database")
 	}
+
+	DB.AutoMigrate(&model.User{})
 
 	fmt.Println("Connection Opened to Database")
 }
