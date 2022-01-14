@@ -30,6 +30,7 @@ const globalStyles = globalCss({
     margin: 0,
     padding: 0,
     boxSizing: 'border-box',
+    fontFamily: '$sans',
   },
   html: {
     width: '100%',

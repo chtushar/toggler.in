@@ -1,4 +1,4 @@
-import { styled } from '../../stitches.config';
+import { styled } from '../stitches.config';
 import Head from 'next/head';
 import React from 'react';
 
