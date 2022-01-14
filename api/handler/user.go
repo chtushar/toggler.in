@@ -14,6 +14,8 @@ func hashPassword(password string) (string, error) {
 
 func CreateUser(c *fiber.Ctx) error {
 	type NewUser struct {
+		FirstName string
+		LastName string
 		Email string
 	}
 
@@ -35,6 +37,8 @@ func CreateUser(c *fiber.Ctx) error {
 
 	newUser := NewUser{
 		Email:    user.Email,
+		FirstName: user.FirstName,
+		LastName: user.LastName,
 	}
 
 	return c.JSON(fiber.Map{"status": "success", "message": "Created user", "data": newUser})

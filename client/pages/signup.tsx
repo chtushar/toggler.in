@@ -6,8 +6,10 @@ const Signup: NextPage = () => {
   const { handleCreateUser } = useCreateUser();
   const { handleChange, handleSubmit, values } = useFormik({
     initialValues: {
-      email: '',
-      password: '',
+      firstName: undefined,
+      lastName: undefined,
+      email: undefined,
+      password: undefined,
     },
     onSubmit: handleCreateUser,
   });
@@ -15,6 +17,24 @@ const Signup: NextPage = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
+        <label htmlFor='firstName'>
+          First Name:
+          <input
+            type='text'
+            name='firstName'
+            onChange={handleChange}
+            value={values.firstName}
+          />
+        </label>
+        <label htmlFor='lastName'>
+          Last Name:
+          <input
+            type='text'
+            name='lastName'
+            onChange={handleChange}
+            value={values.lastName}
+          />
+        </label>
         <label htmlFor='email'>
           Email:
           <input

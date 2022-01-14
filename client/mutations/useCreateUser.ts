@@ -1,8 +1,10 @@
 import { requests } from '../utils/requests';
 
 interface CreateUserRequestBody {
-  email: string;
-  password: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  password?: string;
 }
 
 interface UseCreateUserResponse {
@@ -11,10 +13,12 @@ interface UseCreateUserResponse {
 
 const useCreateUser = (): UseCreateUserResponse => {
   const handleCreateUser = async ({
+    firstName,
+    lastName,
     email,
     password,
   }: CreateUserRequestBody) => {
-    await requests.post('/api/user', { email, password });
+    await requests.post('/api/user', { firstName, lastName, email, password });
   };
 
   return {
