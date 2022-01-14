@@ -4,9 +4,22 @@ import React from 'react';
 
 const LayoutWrapper = styled('div', {
   paddingX: 'calc(6*$10)',
+  paddingY: '$10',
   width: '100%',
   minHeight: '100vh',
   backgroundColor: '$gray1',
+
+  '@bp1': {
+    paddingX: 'calc(3*$10)',
+  },
+
+  '@bp2': {
+    paddingX: '$10',
+  },
+
+  '@bp3': {
+    paddingX: '$6',
+  },
 });
 
 const Layout = ({ children }: { children: React.ReactNode }) => {

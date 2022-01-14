@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 
-import { Flex, Button } from '../ds';
-import useCreateUser from '../mutations/useCreateUser';
+import { Flex, Button, TextField, Text } from '../ds';
+import useCreateUser from '../requests/useCreateUser';
 import { signupFormSchema } from '../utils/validation';
 
 const SignupForm = () => {
@@ -22,42 +22,54 @@ const SignupForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <Flex direction='column' gap='8'>
-        <label htmlFor='firstName'>
-          First Name:
-          <input
+        <Flex direction='column' gap='2'>
+          <Text as='label' size={18} weight='semiBold' htmlFor='firstName'>
+            First Name:
+          </Text>
+          <TextField
             type='text'
             name='firstName'
+            placeholder='Your first name'
             onChange={handleChange}
             value={values.firstName}
           />
-        </label>
-        <label htmlFor='lastName'>
-          Last Name:
-          <input
+        </Flex>
+        <Flex direction='column' gap='2'>
+          <Text as='label' size={18} weight='semiBold' htmlFor='lastName'>
+            Last Name:
+          </Text>
+          <TextField
             type='text'
             name='lastName'
+            placeholder='Your last name'
             onChange={handleChange}
             value={values.lastName}
           />
-        </label>
-        <label htmlFor='email'>
-          Email:
-          <input
+        </Flex>
+        <Flex direction='column' gap='2'>
+          <Text as='label' size={18} weight='semiBold' htmlFor='email'>
+            Work Email:
+          </Text>
+          <TextField
             type='email'
             name='email'
+            placeholder='Your work email'
             onChange={handleChange}
             value={values.email}
           />
-        </label>
-        <label htmlFor='password'>
-          Password
-          <input
+        </Flex>
+        <Flex direction='column' gap='2'>
+          <Text as='label' size={18} weight='semiBold' htmlFor='password'>
+            Password
+          </Text>
+          <TextField
             type='password'
             name='password'
+            placeholder='*****'
             onChange={handleChange}
             value={values.password}
           />
-        </label>
+        </Flex>
         <Button type='submit' disabled={isSubmitButtonDisabled}>
           Create free account
         </Button>

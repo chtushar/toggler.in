@@ -8,7 +8,17 @@ const Signup: NextPage = () => {
     <Layout>
       <Box css={{ width: '100%' }}>
         <Grid flow='row' columns='5'>
-          <Box css={{ gridColumn: '1 / 3' }}>
+          <Box
+            css={{
+              gridColumn: '1 / 3',
+              '@bp2': {
+                gridColumn: '1 / 4',
+              },
+              '@bp3': {
+                gridColumn: '1 / 6',
+              },
+            }}
+          >
             <SignupForm />
           </Box>
         </Grid>
