@@ -1,4 +1,5 @@
 import type { AppProps } from 'next/app';
+import { SWRConfig } from 'swr';
 import { normalize } from 'normalize-stitches';
 import { globalCss } from '../stitches.config';
 
@@ -42,9 +43,17 @@ const globalStyles = globalCss({
   },
 });
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({
+  Component,
+  pageProps,
+  fallback,
+}: AppProps & { fallback: Record<string, unknown> }) {
   globalStyles();
-  return <Component {...pageProps} />;
+  return (
+    <SWRConfig value={{ fallback }}>
+      <Component {...pageProps} />
+    </SWRConfig>
+  );
 }
 
 export default MyApp;

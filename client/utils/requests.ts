@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { AxiosRequestConfig } from 'axios';
 import { ENV } from '../constants/env';
 
-const instance = axios.create();
+const instance = axios.create({ withCredentials: true });
 
 export const requests = {
   get: <T>(url: string): Promise<T> =>
