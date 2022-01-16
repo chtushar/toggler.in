@@ -5,7 +5,7 @@ import useCreateUser from '../requests/useCreateUser';
 import { signupFormSchema } from '../utils/validation';
 
 const SignupForm = () => {
-  const { handleCreateUser } = useCreateUser();
+  const { mutate, isLoading } = useCreateUser();
   const { handleChange, handleSubmit, values, isValid, dirty } = useFormik({
     initialValues: {
       firstName: '',
@@ -14,10 +14,12 @@ const SignupForm = () => {
       password: '',
     },
     validationSchema: signupFormSchema,
-    onSubmit: handleCreateUser,
+    onSubmit: (values) => {
+      mutate(values);
+    },
   });
 
-  const isSubmitButtonDisabled = !isValid || !dirty;
+  const isSubmitButtonDisabled = !isValid || !dirty || isLoading;
 
   return (
     <form onSubmit={handleSubmit}>

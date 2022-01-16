@@ -13,6 +13,11 @@ import (
 	"toggler.in/api/model"
 )
 
+	type AuthCookieData struct {
+		ID string `json:"id"`
+		Email    string `json:"email"`
+	}
+
 func getUserByEmail(e string) (*model.User, error) {
 	db := database.DB
 	var user model.User
@@ -23,6 +28,32 @@ func getUserByEmail(e string) (*model.User, error) {
 		return nil, err
 	}
 	return &user, nil
+}
+
+func attachCookie(c *fiber.Ctx, authCookieData *AuthCookieData) error {
+	token := jwt.New(jwt.SigningMethodHS256)
+
+	claims := token.Claims.(jwt.MapClaims)
+
+	claims["email"] = authCookieData.Email
+	claims["id"] = authCookieData.ID
+	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+
+	t, err := token.SignedString([]byte(config.Config("JWT_SECRET")))
+
+	if err != nil {
+		return c.SendStatus(fiber.StatusInternalServerError)
+	}
+
+	c.Cookie(&fiber.Cookie{
+        Name:     "token",
+        Value:    t,
+        Expires:  time.Now().Add(24 * time.Hour),
+        HTTPOnly: true,
+        SameSite: "lax",
+  })
+
+	return nil
 }
 
 // CheckPasswordHash compare password with hash
@@ -47,7 +78,7 @@ func Login(c *fiber.Ctx) error {
 		ID string `json:"id"`
 		Email string `json:"email"`
 		FirstName string `json:"firstName"`
-		LastName string `json:"firstName"`
+		LastName string `json:"lastName"`
 	}
 
 	var input LoginInput
@@ -80,27 +111,14 @@ func Login(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "error", "message": "Invalid password", "data": nil})
 	}
 
-	token := jwt.New(jwt.SigningMethodHS256)
-
-	claims := token.Claims.(jwt.MapClaims)
-
-	claims["email"] = ud.Email
-	claims["id"] = ud.ID
-	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
-
-	t, err := token.SignedString([]byte(config.Config("JWT_SECRET")))
+	err = attachCookie(c, &AuthCookieData{
+		ID: ud.ID,
+		Email: ud.Email,
+	})
 
 	if err != nil {
-		return c.SendStatus(fiber.StatusInternalServerError)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "error", "message": "Error on login request", "data": err})
 	}
-
-	c.Cookie(&fiber.Cookie{
-        Name:     "token",
-        Value:    t,
-        Expires:  time.Now().Add(24 * time.Hour),
-        HTTPOnly: true,
-        SameSite: "lax",
-  })
 
 	responseData := ResponseData{
 		ID: user.ID,

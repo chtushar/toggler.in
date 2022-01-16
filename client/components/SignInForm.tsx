@@ -5,17 +5,19 @@ import useSignInUser from '../requests/useSignInUser';
 import { signInFormSchema } from '../utils/validation';
 
 const SignInForm = () => {
-  const { handleSignIn } = useSignInUser();
+  const { mutate, isLoading } = useSignInUser();
   const { handleSubmit, handleChange, values, isValid, dirty } = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
-    onSubmit: handleSignIn,
+    onSubmit: (values) => {
+      mutate(values);
+    },
     validationSchema: signInFormSchema,
   });
 
-  const isSubmitButtonDisabled = !isValid || !dirty;
+  const isSubmitButtonDisabled = !isValid || !dirty || isLoading;
 
   return (
     <form onSubmit={handleSubmit}>

@@ -1,3 +1,7 @@
+import { useRouter } from 'next/router';
+import { useMutation, UseMutationResult } from 'react-query';
+import { queryKeys } from '../constants/queryKeys';
+import { queryClient } from '../utils/requestClient';
 import { requests } from '../utils/requests';
 
 interface CreateUserRequestBody {
@@ -7,23 +11,39 @@ interface CreateUserRequestBody {
   password?: string;
 }
 
-interface UseCreateUserResponse {
-  handleCreateUser: (values: CreateUserRequestBody) => void;
+interface CreateUserResponseBody {
+  user: {
+    id?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+  };
 }
 
-const useCreateUser = (): UseCreateUserResponse => {
-  const handleCreateUser = async ({
-    firstName,
-    lastName,
-    email,
-    password,
-  }: CreateUserRequestBody) => {
-    await requests.post('/api/user', { firstName, lastName, email, password });
-  };
+const useCreateUser = () => {
+  const router = useRouter();
+  const mutation = useMutation(
+    ({
+      firstName,
+      lastName,
+      email,
+      password,
+    }: CreateUserRequestBody): Promise<CreateUserResponseBody> =>
+      requests.post('/api/user', { firstName, lastName, email, password }),
+    {
+      onSuccess: (response) => {
+        queryClient.setQueryData<CreateUserResponseBody['user']>(
+          queryKeys.user,
+          () => {
+            return { ...response.user };
+          },
+        );
+        router.replace('/dashboard');
+      },
+    },
+  );
 
-  return {
-    handleCreateUser,
-  };
+  return mutation;
 };
 
 export default useCreateUser;

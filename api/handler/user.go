@@ -27,6 +27,7 @@ func userExists(id string) bool {
 
 func CreateUser(c *fiber.Ctx) error {
 	type NewUser struct {
+		ID string
 		FirstName string
 		LastName string
 		Email string
@@ -48,13 +49,23 @@ func CreateUser(c *fiber.Ctx) error {
 		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Couldn't create user", "data": err})
 	}
 
+	err = attachCookie(c,&AuthCookieData{
+		ID: user.ID,
+		Email: user.Email,
+	})
+
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "error", "message": "Error on login request", "data": err})
+	}
+
 	newUser := NewUser{
+		ID: user.ID,
 		Email:    user.Email,
 		FirstName: user.FirstName,
 		LastName: user.LastName,
 	}
 
-	return c.JSON(fiber.Map{"status": "success", "message": "Created user", "data": newUser})
+	return c.JSON(fiber.Map{"user": newUser})
 }
 
 func GetUserStatus(c *fiber.Ctx) error {

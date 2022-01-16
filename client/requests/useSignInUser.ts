@@ -1,4 +1,7 @@
 import { useRouter } from 'next/router';
+import { useMutation } from 'react-query';
+import { queryKeys } from '../constants/queryKeys';
+import { queryClient } from '../utils/requestClient';
 import { requests } from '../utils/requests';
 
 interface SignInUserRequestBody {
@@ -6,24 +9,37 @@ interface SignInUserRequestBody {
   password?: string;
 }
 
-interface UseSignInUserResponse {
-  handleSignIn: (values: SignInUserRequestBody) => void;
+interface SignInUserResponseBody {
+  user: {
+    id?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+  };
 }
 
-const useSignInUser = (): UseSignInUserResponse => {
+const useSignInUser = () => {
   const router = useRouter();
-  const handleSignIn = async ({ email, password }: SignInUserRequestBody) => {
-    try {
-      await requests.post('/api/auth/login', { email, password });
-      router.replace('/dashboard');
-    } catch (error) {
-      console.log('there was an error');
-    }
-  };
+  const mutation = useMutation(
+    ({
+      email,
+      password,
+    }: SignInUserRequestBody): Promise<SignInUserResponseBody> =>
+      requests.post('/api/auth/login', { email, password }),
+    {
+      onSuccess: (response) => {
+        queryClient.setQueryData<SignInUserResponseBody['user']>(
+          queryKeys.user,
+          () => {
+            return { ...response.user };
+          },
+        );
+        router.replace('/dashboard');
+      },
+    },
+  );
 
-  return {
-    handleSignIn,
-  };
+  return mutation;
 };
 
 export default useSignInUser;
