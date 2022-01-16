@@ -1,7 +1,11 @@
+import { QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
+
 import type { AppProps } from 'next/app';
-import { SWRConfig } from 'swr';
 import { normalize } from 'normalize-stitches';
 import { globalCss } from '../stitches.config';
+import { queryClient } from '../utils/requestClient';
+import { ENV } from '../constants/env';
 
 const globalStyles = globalCss({
   ...normalize,
@@ -43,16 +47,13 @@ const globalStyles = globalCss({
   },
 });
 
-function MyApp({
-  Component,
-  pageProps,
-  fallback,
-}: AppProps & { fallback: Record<string, unknown> }) {
+function MyApp({ Component, pageProps }: AppProps) {
   globalStyles();
   return (
-    <SWRConfig value={{ fallback }}>
+    <QueryClientProvider client={queryClient}>
       <Component {...pageProps} />
-    </SWRConfig>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
 

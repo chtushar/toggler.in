@@ -1,8 +1,12 @@
 package handler
 
 import (
+	"fmt"
+
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
+	"toggler.in/api/config"
 	"toggler.in/api/database"
 	"toggler.in/api/model"
 )
@@ -10,6 +14,15 @@ import (
 func hashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	return string(bytes), err
+}
+
+func userExists(id string) bool {
+	db := database.DB
+	var user model.User
+	user.ID = id
+	db.Limit(1).Find(&user)
+
+	return user.Email != ""
 }
 
 func CreateUser(c *fiber.Ctx) error {
@@ -42,4 +55,32 @@ func CreateUser(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{"status": "success", "message": "Created user", "data": newUser})
+}
+
+func GetUserStatus(c *fiber.Ctx) error {
+	tokenString := c.Cookies("token")
+	claims := jwt.MapClaims{}
+	_, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+    return []byte(config.Config("JWT_SECRET")), nil
+	})
+
+	if err != nil {
+		if err == jwt.ErrSignatureInvalid {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "error", "message": "No logged in", "data": err, "isLoggedIn": false})
+		}
+
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "error", "message": "Bad Reuqest", "data": err, "isLoggedIn": false})
+	}
+
+	if claims.Valid() != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "error", "message": "No logged in", "data": err, "isLoggedIn": false})
+	}
+
+	userId := fmt.Sprintf("%v", claims["id"])
+
+	if !userExists(userId) {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "error", "message": "No logged in", "data": err, "isLoggedIn": false})
+	}
+
+	return c.JSON(fiber.Map{"isLoggedIn": true})
 }

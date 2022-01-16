@@ -1,4 +1,3 @@
-import useSWR from 'swr';
 import Layout from '../../components/Layout';
 import { requests } from '../../utils/requests';
 

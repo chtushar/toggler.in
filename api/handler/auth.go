@@ -43,6 +43,13 @@ func Login(c *fiber.Ctx) error {
 		Password string `json:"password"`
 	}
 
+	type ResponseData struct {
+		ID string `json:"id"`
+		Email string `json:"email"`
+		FirstName string `json:"firstName"`
+		LastName string `json:"firstName"`
+	}
+
 	var input LoginInput
 	var ud UserData
 
@@ -95,5 +102,12 @@ func Login(c *fiber.Ctx) error {
         SameSite: "lax",
   })
 
-	return c.JSON(fiber.Map{"status": "success", "data": user})
+	responseData := ResponseData{
+		ID: user.ID,
+		Email: user.Email,
+		FirstName: user.FirstName,
+		LastName: user.LastName,
+	}
+
+	return c.JSON(fiber.Map{"status": "success", "user": responseData})
 }

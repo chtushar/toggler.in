@@ -5,8 +5,8 @@ import { ENV } from '../constants/env';
 const instance = axios.create({ withCredentials: true });
 
 export const requests = {
-  get: <T>(url: string): Promise<T> =>
-    instance.get<T>(`${ENV.API_ROOT}${url}`).then(({ data }) => data),
+  get: <T>(url: string, config?: AxiosRequestConfig): Promise<T> =>
+    instance.get<T>(`${ENV.API_ROOT}${url}`, config).then(({ data }) => data),
   post: <T, Q>(
     url: string,
     body?: T,
