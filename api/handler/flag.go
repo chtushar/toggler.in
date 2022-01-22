@@ -6,6 +6,10 @@ import (
 	"toggler.in/api/config"
 )
 
+func CreateFlag () 	{
+
+}
+
 func GetUserFlags (c *fiber.Ctx) error {
 	tokenString := c.Cookies("token")
 	claims := jwt.MapClaims{}
