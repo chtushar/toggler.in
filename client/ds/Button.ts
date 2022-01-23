@@ -3,12 +3,12 @@ import { styled } from '../stitches.config';
 export const Button = styled('button', {
   cursor: 'pointer',
   padding: '$4 $8',
-  backgroundColor: '$gray12',
-  color: '$gray1',
+  backgroundColor: '$slate12',
+  color: '$slate1',
   border: 'none',
-  borderRadius: '$space$1',
+  borderRadius: '$space$4',
   '&:disabled': {
     cursor: 'default',
-    backgroundColor: '$gray8',
+    backgroundColor: '$slate8',
   },
 });

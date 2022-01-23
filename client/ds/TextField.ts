@@ -8,7 +8,6 @@ export const TextField = styled('input', {
   margin: '0',
   outline: 'none',
   width: '100%',
-  WebkitTapHighlightColor: 'rgba(0,0,0,0)',
   '&::before': {
     boxSizing: 'border-box',
   },
@@ -17,10 +16,20 @@ export const TextField = styled('input', {
   },
 
   // Custom
-  border: '1px solid $gray11',
-  padding: '$3',
-  borderRadius: '$space$1',
+  fontSize: '$18',
+  fontWeight: '$semiBold',
+  border: '1px solid transparent',
+  padding: '$4',
+  borderRadius: '$space$4',
+  backgroundColor: '$slate3',
+  color: '$slate12',
   '&::placeholder': {
-    color: '$gray8',
+    color: '$slate8',
+  },
+
+  '&:active,&:focus': {
+    backgroundColor: '$slate1',
+    border: '1px solid $colors$blue9',
+    boxShadow: '$active-blue',
   },
 });

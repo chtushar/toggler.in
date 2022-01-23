@@ -7,7 +7,7 @@ const LayoutWrapper = styled('div', {
   paddingY: '$10',
   width: '100%',
   minHeight: '100vh',
-  backgroundColor: '$gray1',
+  backgroundColor: '$slate1',
 
   '@bp1': {
     paddingX: 'calc(3*$10)',

@@ -1,5 +1,5 @@
 import { createStitches } from '@stitches/react';
-import { gray } from '@radix-ui/colors';
+import { gray, slate, blue } from '@radix-ui/colors';
 
 export const {
   styled,
@@ -23,6 +23,8 @@ export const {
     },
     colors: {
       ...gray,
+      ...slate,
+      ...blue,
     },
     space: {
       1: '4px',
@@ -52,6 +54,9 @@ export const {
       96: '96px',
       144: '144px',
       288: '288px',
+    },
+    shadows: {
+      'active-blue': '0px 0px 0px 4px rgba(206, 231, 254, 0.5)',
     },
   },
   media: {
