@@ -1,5 +1,13 @@
 import { createStitches } from '@stitches/react';
-import { gray, slate, blue } from '@radix-ui/colors';
+import { slate, blue, lime } from '@radix-ui/colors';
+
+const primary = () => {
+  const primaryColorShades = Object.fromEntries(
+    Object.values(lime).map((shade, index) => [`primary${index + 1}`, shade]),
+  );
+
+  return primaryColorShades;
+};
 
 export const {
   styled,
@@ -22,7 +30,7 @@ export const {
       regular: 400,
     },
     colors: {
-      ...gray,
+      ...primary(),
       ...slate,
       ...blue,
     },

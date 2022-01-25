@@ -26,7 +26,6 @@ export const Text = styled('span', {
       },
       14: {
         fontSize: '$14',
-        letterSpacing: '-.016em',
       },
       18: {
         fontSize: '$18',
@@ -54,6 +53,14 @@ export const Text = styled('span', {
       },
       288: {
         fontSize: '288px',
+      },
+    },
+    color: {
+      slate12: {
+        color: '$slate12',
+      },
+      slate10: {
+        color: '$slate10',
       },
     },
     weight: {

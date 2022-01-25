@@ -1,8 +1,18 @@
 import Layout from '../../components/Layout';
+import Sidebar from '../../components/Sidebar';
+import FeatureFlags from '../../components/FeatureFlags';
+import { Grid } from '../../ds';
 import { requests } from '../../utils/requests';
 
 const Dashboard = () => {
-  return <Layout>Dashboard</Layout>;
+  return (
+    <Layout>
+      <Grid css={{ height: '100%' }} columns={4} gap={4}>
+        <Sidebar />
+        <FeatureFlags />
+      </Grid>
+    </Layout>
+  );
 };
 
 export const getServerSideProps = async (ctx: any) => {

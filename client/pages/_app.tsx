@@ -1,3 +1,4 @@
+import 'remixicon/fonts/remixicon.css';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
@@ -5,7 +6,6 @@ import type { AppProps } from 'next/app';
 import { normalize } from 'normalize-stitches';
 import { globalCss } from '../stitches.config';
 import { queryClient } from '../utils/requestClient';
-import { ENV } from '../constants/env';
 
 const globalStyles = globalCss({
   ...normalize,

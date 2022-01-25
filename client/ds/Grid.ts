@@ -1,6 +1,7 @@
 import { styled } from '../stitches.config';
 
 export const Grid = styled('div', {
+  position: 'relative',
   boxSizing: 'border-box',
   display: 'grid',
   width: '100%',
