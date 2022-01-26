@@ -1,4 +1,4 @@
-import { Card, Flex, Text } from '../ds';
+import { Card, Flex, Text, Icon, Button } from '../ds';
 
 const Sidebar = (): JSX.Element => {
   return (
@@ -15,7 +15,7 @@ const Sidebar = (): JSX.Element => {
           <Text as='label' size={14} color='slate10' weight='semiBold'>
             Team
           </Text>
-          <Text as='p' size={18} color='slate12' weight='semiBold'>
+          <Text as='p' size={18} color='slate12' weight='bold'>
             Devfolio
           </Text>
         </Flex>
@@ -23,13 +23,27 @@ const Sidebar = (): JSX.Element => {
           <Text as='label' size={14} color='slate10' weight='semiBold'>
             Team
           </Text>
-          <Text as='p' size={18} color='slate12' weight='semiBold'>
+          <Text as='p' size={18} color='slate12' weight='bold'>
             Devfolio
           </Text>
         </Flex>
       </Card>
-      <Card variant='primary2'>Dashboard</Card>
-      <Card variant='primary2'>Dashboard</Card>
+      <Card direction='column' align='stretch' gap={2} variant='primary2'>
+        <Button variant='menu-button'>
+          <Icon className='ri-toggle-line' />
+          Feature Flags
+        </Button>
+        <Button variant='menu-button'>
+          <Icon className='ri-team-line' />
+          Team
+        </Button>
+      </Card>
+      <Card direction='column' align='stretch' gap={2} variant='primary2'>
+        <Button variant='transparent'>
+          <Icon className='ri-settings-3-line' />
+          Settings
+        </Button>
+      </Card>
     </Flex>
   );
 };

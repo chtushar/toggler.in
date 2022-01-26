@@ -11,24 +11,30 @@ const globalStyles = globalCss({
   ...normalize,
   '@font-face': [
     {
-      fontFamily: 'Noto Sans Display',
+      fontFamily: 'Open Sans',
       fontWeight: 400,
-      src: 'url(fonts/NotoSansDisplay-Regular.ttf)',
+      src: 'url(fonts/OpenSans-Regular.ttf)',
     },
     {
-      fontFamily: 'Noto Sans Display',
+      fontFamily: 'Open Sans',
       fontWeight: 500,
-      src: 'url(fonts/NotoSansDisplay-Medium.ttf)',
+      src: 'url(fonts/OpenSans-Medium.ttf)',
     },
     {
-      fontFamily: 'Noto Sans Display',
+      fontFamily: 'Open Sans',
       fontWeight: 600,
-      src: 'url(fonts/NotoSansDisplay-SemiBold.ttf)',
+      src: 'url(fonts/OpenSans-SemiBold.ttf)',
     },
     {
-      fontFamily: 'Noto Sans Display',
+      fontFamily: 'Open Sans',
       fontWeight: 700,
-      src: 'url(fonts/NotoSansDisplay-Bold.ttf)',
+      src: 'url(fonts/OpenSans-Bold.ttf)',
+    },
+    {
+      fontFamily: 'Open Sans',
+      fontWeight: 400,
+      fontStyle: 'italic',
+      src: 'url(fonts/OpenSans-Italic.ttf)',
     },
   ],
   '*': {

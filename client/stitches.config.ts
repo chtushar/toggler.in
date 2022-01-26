@@ -1,5 +1,5 @@
 import { createStitches } from '@stitches/react';
-import { slate, blue, lime } from '@radix-ui/colors';
+import { slate, blue, lime, blackA } from '@radix-ui/colors';
 
 const primary = () => {
   const primaryColorShades = Object.fromEntries(
@@ -21,18 +21,19 @@ export const {
 } = createStitches({
   theme: {
     fonts: {
-      sans: "'Noto Sans Display', sans-serif",
+      sans: "'Open Sans', sans-serif",
     },
     fontWeights: {
       bold: 700,
+      regular: 400,
       semiBold: 600,
       medium: 500,
-      regular: 400,
     },
     colors: {
       ...primary(),
       ...slate,
       ...blue,
+      ...blackA,
     },
     space: {
       1: '4px',

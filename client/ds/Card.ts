@@ -28,5 +28,10 @@ export const Card = styled(Flex, {
         backgroundColor: '$primary1',
       },
     },
+    padding: {
+      32: {
+        padding: '$8',
+      },
+    },
   },
 });

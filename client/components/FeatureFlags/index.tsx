@@ -1,4 +1,4 @@
-import { Flex, Card } from '../../ds';
+import { Flex, Card, Text, Button, Icon } from '../../ds';
 
 const FeatureFlags = () => {
   return (
@@ -8,7 +8,21 @@ const FeatureFlags = () => {
       gap={10}
       css={{ gridColumn: '2 / 5' }}
     >
-      <Card variant='primary2'>Dashboard</Card>
+      <Card
+        direction='row'
+        align='center'
+        justify='between'
+        variant='primary2'
+        padding={32}
+      >
+        <Text size={48} weight='bold' color='slate12'>
+          Feature Flags
+        </Text>
+        <Button appearance='primary'>
+          <Icon className='ri-add-line' />
+          Add a new flag
+        </Button>
+      </Card>
       <Card variant='primary1'>Dashboard</Card>
     </Flex>
   );

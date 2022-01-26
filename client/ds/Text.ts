@@ -67,11 +67,11 @@ export const Text = styled('span', {
       bold: {
         fontWeight: '$bold',
       },
-      semiBold: {
-        fontWeight: '$semiBold',
-      },
       medium: {
         fontWeight: '$medium',
+      },
+      semiBold: {
+        fontWeight: '$semiBold',
       },
       regular: {
         fontWeight: '$regular',
