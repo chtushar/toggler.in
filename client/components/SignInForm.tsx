@@ -46,7 +46,11 @@ const SignInForm = () => {
             value={values.password}
           />
         </Flex>
-        <Button type='submit' disabled={isSubmitButtonDisabled}>
+        <Button
+          appearance='primary'
+          type='submit'
+          disabled={isSubmitButtonDisabled}
+        >
           Sign in to toggler.in
         </Button>
       </Flex>

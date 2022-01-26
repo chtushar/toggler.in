@@ -72,7 +72,11 @@ const SignupForm = () => {
             value={values.password}
           />
         </Flex>
-        <Button type='submit' disabled={isSubmitButtonDisabled}>
+        <Button
+          appearance='primary'
+          type='submit'
+          disabled={isSubmitButtonDisabled}
+        >
           Create free account
         </Button>
       </Flex>

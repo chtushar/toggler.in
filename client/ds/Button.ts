@@ -63,6 +63,12 @@ export const Button = styled('button', {
           border: '1px solid transparent',
         },
       },
+      select: {
+        padding: '$4',
+        backgroundColor: '$slate3',
+        color: '$slate12',
+        fontSize: '$14',
+      },
       transparent: {
         padding: '$4',
         fontWeight: '$bold',

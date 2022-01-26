@@ -1,4 +1,4 @@
-import { Card, Flex, Text, Icon, Button } from '../ds';
+import { Card, Flex, Text, Icon, Button, Select } from '../ds';
 
 const Sidebar = (): JSX.Element => {
   return (
@@ -21,11 +21,14 @@ const Sidebar = (): JSX.Element => {
         </Flex>
         <Flex direction='column' gap={2}>
           <Text as='label' size={14} color='slate10' weight='semiBold'>
-            Team
+            Mode
           </Text>
-          <Text as='p' size={18} color='slate12' weight='bold'>
-            Devfolio
-          </Text>
+          <Select
+            items={[
+              { value: 'development', label: 'Development' },
+              { value: 'production', label: 'Production' },
+            ]}
+          />
         </Flex>
       </Card>
       <Card direction='column' align='stretch' gap={2} variant='primary2'>
