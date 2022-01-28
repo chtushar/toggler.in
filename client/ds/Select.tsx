@@ -6,19 +6,24 @@ import { Flex } from './Flex';
 
 interface SelectProps {
   items: Array<Record<string, any>>;
+  onChange?: any;
 }
 
 const SelectWrapper = styled('div', {
   position: 'relative',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'stretch',
 });
 
 const List = styled(Flex, {
   position: 'absolute',
+  top: '100%',
   listStyle: 'none',
   marginTop: '$2',
   borderRadius: '$space$2',
   overflow: 'hidden',
-  filter: 'drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.1))',
+  boxShadow: '$shadow$1',
   zIndex: 10,
   width: '100%',
 });
@@ -39,7 +44,7 @@ const ListItem = styled('li', {
   },
 });
 
-export const Select = ({ items }: SelectProps) => {
+export const Select = ({ items, onChange }: SelectProps) => {
   const {
     isOpen,
     highlightedIndex,
@@ -49,24 +54,26 @@ export const Select = ({ items }: SelectProps) => {
     selectedItem,
   } = useSelect({
     items,
+    itemToString: (item) => item?.value,
+    onSelectedItemChange: onChange,
   });
   return (
     <SelectWrapper>
       <Button type='button' variant='select' {...getToggleButtonProps()}>
-        {selectedItem || 'Choose an option'}{' '}
+        {selectedItem?.label || 'Choose an option'}{' '}
         <Icon
           className={isOpen ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'}
         />
       </Button>
       <List as='ul' direction='column' align='stretch' {...getMenuProps()}>
         {isOpen &&
-          items.map(({ value, label }, index) => (
+          items.map((item, index) => (
             <ListItem
-              key={value}
+              key={`${item?.value}-${index}`}
               selected={highlightedIndex === index}
-              {...getItemProps({ item: value, index })}
+              {...getItemProps({ item, index })}
             >
-              {label}
+              {item?.label}
             </ListItem>
           ))}
       </List>

@@ -1,6 +1,7 @@
 export { Box } from './Box';
 export { Button } from './Button';
 export { Card } from './Card';
+export * as Dialog from './Dialog';
 export { Flex } from './Flex';
 export { Grid } from './Grid';
 export { Icon } from './Icon';

@@ -68,6 +68,7 @@ export const Button = styled('button', {
         backgroundColor: '$slate3',
         color: '$slate12',
         fontSize: '$14',
+        justifyContent: 'space-between',
       },
       transparent: {
         padding: '$4',

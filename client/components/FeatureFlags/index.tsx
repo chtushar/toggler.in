@@ -1,4 +1,5 @@
-import { Flex, Card, Text, Button, Icon } from '../../ds';
+import { CreateFlagModal } from './CreateFlagModal';
+import { Flex, Card, Text, Button, Icon, Dialog } from '../../ds';
 
 const FeatureFlags = () => {
   return (
@@ -18,10 +19,7 @@ const FeatureFlags = () => {
         <Text size={48} weight='bold' color='slate12'>
           Feature Flags
         </Text>
-        <Button appearance='primary'>
-          <Icon className='ri-add-line' />
-          Add a new flag
-        </Button>
+        <CreateFlagModal />
       </Card>
       <Card variant='primary1'>Dashboard</Card>
     </Flex>
