@@ -1,6 +1,6 @@
 import { styled } from '../stitches.config';
 
-export const TextField = styled('input', {
+export const TextArea = styled('textarea', {
   // Reset
   appearance: 'none',
   boxSizing: 'border-box',

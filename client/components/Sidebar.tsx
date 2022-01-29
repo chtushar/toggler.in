@@ -15,9 +15,10 @@ const Sidebar = (): JSX.Element => {
           <Text as='label' size={14} color='slate10' weight='semiBold'>
             Team
           </Text>
-          <Text as='p' size={18} color='slate12' weight='bold'>
-            Devfolio
-          </Text>
+          <Select
+            items={[{ value: 'devfolio', label: 'Devfolio' }]}
+            selectedOption={{ value: 'devfolio', label: 'Devfolio' }}
+          />
         </Flex>
         <Flex direction='column' gap={2}>
           <Text as='label' size={14} color='slate10' weight='semiBold'>

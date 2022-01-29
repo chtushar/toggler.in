@@ -62,7 +62,7 @@ func CheckPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-func Login(c *fiber.Ctx) error {
+func LogIn(c *fiber.Ctx) error {
 	type LoginInput struct {
 		Email string `json:"email"`
 		Password string `json:"password"`
@@ -128,4 +128,9 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{"status": "success", "user": responseData})
+}
+
+func LogOut(c *fiber.Ctx) error {
+	c.ClearCookie("token")
+	return c.SendStatus(fiber.StatusOK)
 }

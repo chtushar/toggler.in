@@ -2,26 +2,22 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v4"
-	"toggler.in/api/config"
 )
 
-func CreateFlag () 	{
-
+func CreateFlag () error	{
+	return nil
 }
 
 func GetUserFlags (c *fiber.Ctx) error {
-	tokenString := c.Cookies("token")
-	claims := jwt.MapClaims{}
-	_, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-    return []byte(config.Config("JWT_SECRET")), nil
-	})
-
-	if err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "error", "message": "No logged in", "data": err})
+	type RequestBody struct {
+		UserID string `json:"userId" validate:"required"`
 	}
 
-	userId := claims["id"]
+	body := new(RequestBody)
 
-	return c.JSON(fiber.Map{"message": "ok", "id": userId})
+	if err := c.BodyParser(body); err != nil {
+		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Review your input", "data": err})
+	}
+
+	return c.JSON(fiber.Map{"message": "ok", "id": body.UserID})
 }

@@ -6,6 +6,7 @@ import { Flex } from './Flex';
 
 interface SelectProps {
   items: Array<Record<string, any>>;
+  selectedOption?: Record<string, any>;
   onChange?: any;
 }
 
@@ -23,15 +24,17 @@ const List = styled(Flex, {
   marginTop: '$2',
   borderRadius: '$space$2',
   overflow: 'hidden',
-  boxShadow: '$shadow$1',
+  boxShadow: '$2',
   zIndex: 10,
   width: '100%',
+  outline: 'none',
 });
 
 const ListItem = styled('li', {
   background: '$slate1',
-  padding: '$4',
+  padding: '$3 $4',
   fontSize: '$14',
+  cursor: 'pointer',
   variants: {
     selected: {
       true: {
@@ -44,7 +47,7 @@ const ListItem = styled('li', {
   },
 });
 
-export const Select = ({ items, onChange }: SelectProps) => {
+export const Select = ({ items, selectedOption, onChange }: SelectProps) => {
   const {
     isOpen,
     highlightedIndex,
@@ -56,6 +59,7 @@ export const Select = ({ items, onChange }: SelectProps) => {
     items,
     itemToString: (item) => item?.value,
     onSelectedItemChange: onChange,
+    selectedItem: selectedOption,
   });
   return (
     <SelectWrapper>

@@ -77,7 +77,7 @@ func GetUserStatus(c *fiber.Ctx) error {
 
 	if err != nil {
 		if err == jwt.ErrSignatureInvalid {
-			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "error", "message": "No logged in", "data": err, "isLoggedIn": false})
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "error", "message": "Not logged in", "data": err, "isLoggedIn": false})
 		}
 
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "error", "message": "Bad Reuqest", "data": err, "isLoggedIn": false})
