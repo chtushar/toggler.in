@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"fmt"
-
 	"github.com/gofiber/fiber/v2"
 	"toggler.in/api/database"
 	"toggler.in/api/model"
@@ -15,7 +13,6 @@ func CreateTeam (c *fiber.Ctx) error {
 	}
 
 	req := new(RequestBody)
-
 
 	if err := c.BodyParser(req); err != nil {
 		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Review your input", "data": err})
@@ -31,15 +28,18 @@ func CreateTeam (c *fiber.Ctx) error {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "error", "message": "No logged in", "isLoggedIn": false})
 	}
 
-	fmt.Println(user)
+	// fmt.Println(user)
 
-	team := new(model.Team)
-	team.Name = req.Name
+	team := &model.Team{
+		Name: req.Name,
+		Members: []model.Member{
+			{
+				User: user,
+				Role: "admin",
+			},
+		},
+	}
 
-	team.Members = append(team.Members, model.Member{
-		User: user,
-		Role: "admin",
-	})
 
 	return c.JSON(fiber.Map{"status": "success", "message": "Team created", "data": team})
 }

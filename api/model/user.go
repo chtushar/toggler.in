@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"gorm.io/gorm"
-	"toggler.in/api/utils"
+	"toggler.in/api/utils/validator"
 )
 
 type User struct {
@@ -12,7 +12,7 @@ type User struct {
 	FirstName string 			`json:"firstName" validate:"required"`
 	LastName 	string 			`json:"lastName" validate:"required"`
 	Email    	string 			`json:"email" validate:"required,email"`
-	Password 	string 			`json:"password" validate:"min=8"`
+	Password 	string 			`json:"-" validate:"min=8"`
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
@@ -24,6 +24,6 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 func (u *User) IsValid() (bool, error) {
-	err := utils.Validate.Struct(u)
+	err := validator.Validate.Struct(u)
 	return err == nil, err
 }

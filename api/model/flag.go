@@ -2,6 +2,8 @@ package model
 
 import "gorm.io/datatypes"
 
+
+
 type Flag struct {
 	Base
 	Name string `json:"name" validate:"required"`

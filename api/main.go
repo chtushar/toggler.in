@@ -14,7 +14,7 @@ func main() {
 
 	// Create waitgroup
 	wg := new(sync.WaitGroup)
-	wg.Add(1)
+	wg.Add(2)
 
 	database.ConnectDB()
 
@@ -38,7 +38,6 @@ func main() {
 	// 		return c.JSON(fiber.Map{ "message": "ok" })
 	// 	})
 	// 	log.Fatal(app2.Listen(":9091"))
-
 	// 	wg.Done()
 	// } ()
 
