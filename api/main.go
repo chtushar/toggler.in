@@ -32,14 +32,14 @@ func main() {
 	} ()
 
 	// // Application server
-	// go func () {
-	// 	app2 := fiber.New()
-	// 	app2.Get("/", func (c *fiber.Ctx) error {
-	// 		return c.JSON(fiber.Map{ "message": "ok" })
-	// 	})
-	// 	log.Fatal(app2.Listen(":9091"))
-	// 	wg.Done()
-	// } ()
+	go func () {
+		app2 := fiber.New()
+		app2.Get("/", func (c *fiber.Ctx) error {
+			return c.JSON(fiber.Map{ "message": "ok" })
+		})
+		log.Fatal(app2.Listen(":9091"))
+		wg.Done()
+	} ()
 
 	wg.Wait()
 }
