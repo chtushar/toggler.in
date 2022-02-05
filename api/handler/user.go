@@ -68,6 +68,16 @@ func CreateUser(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"user": newUser})
 }
 
+func DeleteUser(c *fiber.Ctx) error {
+	id := c.Params("id")
+	db := database.DB
+
+	if err := db.Where("id = ?", id).Delete(&model.User{}).Error; err != nil {
+		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Couldn't delete user", "data": err})
+	}
+	return c.Status(200).JSON(fiber.Map{"status": "success", "message": "User deleted"})
+}
+
 func GetUserStatus(c *fiber.Ctx) error {
 	tokenString := c.Cookies("token")
 	claims := jwt.MapClaims{}

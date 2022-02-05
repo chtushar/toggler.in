@@ -45,6 +45,8 @@ func ConnectDB() {
 	}
 
 	DB.AutoMigrate(&model.User{})
+	// DB.AutoMigrate(&model.Member{})
+	// DB.AutoMigrate(&model.Team{})
 
 	fmt.Println("Connection Opened to Database")
 }
