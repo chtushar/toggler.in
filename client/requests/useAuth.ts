@@ -18,9 +18,9 @@ interface SignInUserResponseBody {
   };
 }
 
-const useSignInUser = () => {
+const useAuth = () => {
   const router = useRouter();
-  const mutation = useMutation(
+  const signIn = useMutation(
     ({
       email,
       password,
@@ -39,7 +39,14 @@ const useSignInUser = () => {
     },
   );
 
-  return mutation;
+  const signOut = useMutation(() => requests.get('/api/auth/logout'), {
+    onSuccess: () => {
+      queryClient.clear();
+      router.replace('/');
+    },
+  });
+
+  return { signIn, signOut };
 };
 
-export default useSignInUser;
+export default useAuth;

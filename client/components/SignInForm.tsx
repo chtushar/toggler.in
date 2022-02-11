@@ -1,11 +1,13 @@
 import { useFormik } from 'formik';
 
 import { Flex, Button, TextField, Text } from '../ds';
-import useSignInUser from '../requests/useSignInUser';
+import useAuth from '../requests/useAuth';
 import { signInFormSchema } from '../utils/validation';
 
 const SignInForm = () => {
-  const { mutate, isLoading } = useSignInUser();
+  const {
+    signIn: { mutate, isLoading },
+  } = useAuth();
   const { handleSubmit, handleChange, values, isValid, dirty } = useFormik({
     initialValues: {
       email: '',

@@ -1,6 +1,11 @@
 import { Card, Flex, Text, Icon, Button, Select } from '../ds';
+import useAuth from '../requests/useAuth';
 
 const Sidebar = (): JSX.Element => {
+  const {
+    signOut: { mutate },
+  } = useAuth();
+
   return (
     <Flex
       direction='column'
@@ -46,6 +51,10 @@ const Sidebar = (): JSX.Element => {
         <Button variant='transparent'>
           <Icon className='ri-settings-3-line' />
           Settings
+        </Button>
+        <Button variant='transparent' onClick={() => mutate()}>
+          <Icon className='ri-settings-3-line' />
+          Log Out
         </Button>
       </Card>
     </Flex>
