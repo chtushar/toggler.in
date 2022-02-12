@@ -16,7 +16,8 @@ type (
 		Port int
 		Enviroment string
 		Production bool
-		DB *DB
+		JWTSecret string
+ 		DB *DB
 		Logger *Logger
 	}
 )

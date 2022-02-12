@@ -1,7 +1,13 @@
 package cmd
 
-import "fmt"
+import (
+	"fmt"
+
+	"toggler.in/internal/configs"
+)
 
 func Execute()  {
-	fmt.Println("Execute!")
+	cfg := configs.Get()
+
+	fmt.Printf("%+v\n", cfg)
 }
