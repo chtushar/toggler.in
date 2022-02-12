@@ -1,5 +1,5 @@
 build:
-	go build -o bin/api main.go
+	./scripts/build.sh
 
 run: build
 	./bin/api
