@@ -1,13 +1,14 @@
 package cmd
 
 import (
-	"fmt"
-
 	"toggler.in/internal/configs"
+	"toggler.in/internal/db"
 )
 
 func Execute()  {
 	cfg := configs.Get()
 
-	fmt.Printf("%+v\n", cfg)
+	// Connecting to the database.
+	db.GetConnection(cfg)
+
 }
