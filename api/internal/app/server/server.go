@@ -26,7 +26,8 @@ func NewServer(cfg *Config, db *gorm.DB) *Server {
 
 	return &Server{
 		server: http.Server{
-			Addr: fmt.Sprintf("%s:%d", "", cfg.Port),
+			Addr:    fmt.Sprintf("%s:%d", "", cfg.Port),
+			Handler: r,
 		},
 		router: r,
 		db:     db,
