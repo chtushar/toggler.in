@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"sync"
 
+	"go.uber.org/zap"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"toggler.in/internal/configs"
@@ -16,13 +17,13 @@ var (
 )
 
 // Creates a new connection to the database.
-func NewConnection(cfg *configs.App) (*gorm.DB, error) {
-	return connect(cfg)
+func NewConnection(cfg *configs.App, logger *zap.Logger) (*gorm.DB, error) {
+	return connect(cfg, logger)
 }
 
 // Creates a new connection to the database if not present or returns the
 // existing connection.
-func GetConnection(cfg *configs.App) (*gorm.DB, error) {
+func GetConnection(cfg *configs.App, logger *zap.Logger) (*gorm.DB, error) {
 
 	var (
 		conn *gorm.DB
@@ -30,7 +31,7 @@ func GetConnection(cfg *configs.App) (*gorm.DB, error) {
 	)
 
 	once.Do(func() {
-		conn, err = NewConnection(cfg)
+		conn, err = NewConnection(cfg, logger)
 		fmt.Println("Connected to database")
 	})
 
@@ -40,7 +41,7 @@ func GetConnection(cfg *configs.App) (*gorm.DB, error) {
 }
 
 // Connecting to the database.
-func connect(cfg *configs.App) (*gorm.DB, error) {
+func connect(cfg *configs.App, logger *zap.Logger) (*gorm.DB, error) {
 	dsn := url.URL{
 		User:   url.UserPassword(cfg.DB.User, cfg.DB.Password),
 		Scheme: "postgres",
@@ -50,6 +51,7 @@ func connect(cfg *configs.App) (*gorm.DB, error) {
 	database, err := gorm.Open(postgres.Open(dsn.String()), &gorm.Config{})
 
 	if err != nil {
+		logger.Error("Failed to connect to DB", zap.Error(err))
 		return nil, fmt.Errorf("failed to connect to DB: %w", err)
 	}
 

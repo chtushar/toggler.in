@@ -4,19 +4,21 @@ import (
 	"toggler.in/internal/app/server"
 	"toggler.in/internal/configs"
 	"toggler.in/internal/db"
+	"toggler.in/internal/logger"
 )
 
 func Execute() {
 	cfg := configs.Get()
+	log := logger.New(&logger.Config{Production: cfg.Production})
 
 	// Connecting to the database.
-	dbConn, err := db.GetConnection(cfg)
+	dbConn, err := db.GetConnection(cfg, log)
 
 	if err != nil {
 		panic(err)
 	}
 
 	// Initializing the server.
-	srv := server.NewServer(&server.Config{Port: cfg.Port}, dbConn)
+	srv := server.NewServer(&server.Config{Port: cfg.Port, Logger: log}, dbConn)
 	srv.Listen()
 }
