@@ -13,6 +13,7 @@ import (
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"toggler.in/internal/app/router"
+	"toggler.in/internal/http/handlers"
 )
 
 type Config struct {
@@ -68,6 +69,7 @@ func (s *Server) setup() {
 	router.Routes(apiRouter, s.db, s.logger)
 
 	// Add handlers and middlewares below this line
+	s.server.Handler = handlers.RecoveryHandler(s.logger)(s.server.Handler)
 }
 
 func (s *Server) graceFullShutdown() {

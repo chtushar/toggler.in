@@ -18,7 +18,6 @@ type (
 
 type (
 	response struct {
-		RequestID string      `json:"request_id"`
 		Timestamp time.Time   `json:"timestamp"`
 		URI       string      `json:"uri"`
 		Success   bool        `json:"success"`
