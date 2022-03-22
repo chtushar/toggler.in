@@ -20,8 +20,8 @@ func Routes(r *mux.Router, db *gorm.DB, log *zap.Logger,) {
 	reader := request.NewReader(log, jw, v)
 
 	// User routes and handler
-	uh := users.NewHandler(log, reader, jw, db)
+	ur := users.NewRepository(db, log)
+	uh := users.NewHandler(log, reader, jw, ur)
 	users.UserRoutes(r, uh)
-
 
 }

@@ -9,6 +9,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"toggler.in/internal/configs"
+	"toggler.in/internal/models"
 )
 
 var (
@@ -54,6 +55,9 @@ func connect(cfg *configs.App, logger *zap.Logger) (*gorm.DB, error) {
 		logger.Error("Failed to connect to DB", zap.Error(err))
 		return nil, fmt.Errorf("failed to connect to DB: %w", err)
 	}
+
+	// Migrations
+	database.AutoMigrate(&models.User{})
 
 	return database, nil
 }
