@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"go.uber.org/zap"
+	"golang.org/x/crypto/bcrypt"
 	"toggler.in/internal/http/request"
 	"toggler.in/internal/http/response"
 	"toggler.in/internal/models"
@@ -47,10 +48,20 @@ func (h *Handler) addUser() http.HandlerFunc {
 			return
 		}
 
+		// Hashing password
+		p := []byte(req.Password)
+		hashedPassword, err := bcrypt.GenerateFromPassword(p, bcrypt.DefaultCost)
+
+		if err != nil {
+			h.log.Error("Error while hashing password", zap.Error(err))
+			h.jsonWriter.Internal(w, r, &InternalError{})
+			return
+		}
+
 		user, err := h.repository.AddUser(r.Context(), models.AddUserParams{
 			Name: req.Name,
 			Email: req.Email,
-			Password: req.Password,
+			Password: string(hashedPassword),
 		})
 
 		if err != nil {
