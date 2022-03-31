@@ -11,7 +11,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
-	"gorm.io/gorm"
+	"toggler.in/internal/db"
 	"toggler.in/internal/http/handlers"
 	"toggler.in/internal/router"
 )
@@ -28,12 +28,12 @@ type Server struct {
 
 	logger *zap.Logger
 
-	db *gorm.DB
+	db *db.DB
 
 	connClose chan int
 }
 
-func NewServer(cfg *Config, db *gorm.DB) *Server {
+func NewServer(cfg *Config, db *db.DB) *Server {
 	r := mux.NewRouter().StrictSlash(true)
 
 	return &Server{

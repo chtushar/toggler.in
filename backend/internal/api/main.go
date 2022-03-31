@@ -1,6 +1,8 @@
 package app
 
 import (
+	"context"
+
 	"toggler.in/internal/configs"
 	"toggler.in/internal/db"
 	"toggler.in/internal/logger"
@@ -12,7 +14,7 @@ func Execute() {
 	log := logger.New(&logger.Config{Production: cfg.Production})
 
 	// Connecting to the database.
-	dbConn, err := db.GetConnection(cfg, log)
+	dbConn, err := db.GetConnection(context.Background(), cfg, log)
 
 	if err != nil {
 		panic(err)
