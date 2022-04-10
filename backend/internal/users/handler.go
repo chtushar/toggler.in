@@ -6,9 +6,9 @@ import (
 
 	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
+	"toggler.in/internal/db/query"
 	"toggler.in/internal/http/request"
 	"toggler.in/internal/http/response"
-	"toggler.in/internal/models"
 )
 
 //Handler has http handler functions for user APIs
@@ -33,7 +33,7 @@ func (h *Handler) addUser() http.HandlerFunc {
 	}
 
 	type Response struct {
-		ID 	 	uint32 `json:"id"`
+		ID 	 	int32 `json:"id"`
 		Name 	string `json:"name"`
 		Email string `json:"email"`
 		CreatedAt time.Time `json:"created_at"`
@@ -58,7 +58,7 @@ func (h *Handler) addUser() http.HandlerFunc {
 			return
 		}
 
-		user, err := h.repository.AddUser(r.Context(), models.AddUserParams{
+		user, err := h.repository.AddUser(r.Context(), query.AddUserParams{
 			Name: req.Name,
 			Email: req.Email,
 			Password: string(hashedPassword),

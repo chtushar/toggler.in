@@ -5,36 +5,31 @@ import (
 
 	"go.uber.org/zap"
 	"toggler.in/internal/db"
-	"toggler.in/internal/models"
+	"toggler.in/internal/db/query"
 )
 
 //Repository has CRUD functions for users
 type Repository struct {
-	db *db.DB
+	q *query.Queries
 	log *zap.Logger
 }
 
 //NewRepository creates a new instance of Repository
 func NewRepository(db *db.DB, log *zap.Logger) *Repository {
 	return &Repository{
-		db: db,
+		q: query.New(db),
 		log: log,
 	}
 }
 
 //AddUser adds a new User
-func (r *Repository) AddUser(ctx context.Context, user models.AddUserParams) (*models.User, error) {
-	u := &models.User{
-		Name: user.Name,
-		Email: user.Email,
-		Password: user.Password,
+func (r *Repository) AddUser(ctx context.Context, user query.AddUserParams) (*query.User, error) {
+	u, err := r.q.AddUser(ctx, user)
+
+	if err != nil {
+		r.log.Error("failed to add a new user", zap.Error(err))
+		return nil, err
 	}
-	// result := r.db.Create(u)
 
-	// if result.Error != nil {
-	// 	r.log.Error("failed to add a new user", zap.Error(result.Error))
-	// 	return nil, result.Error
-	// }
-
-	return u, nil
+	return &u, nil
 }
