@@ -20,6 +20,12 @@ func Execute() {
 		panic(err)
 	}
 
+	err = db.Setup(cfg, log)
+
+	if err != nil {
+		panic(err)
+	}
+
 	// Initializing the server.
 	srv := server.NewServer(&server.Config{Port: cfg.Port, Logger: log}, dbConn)
 	srv.Listen()

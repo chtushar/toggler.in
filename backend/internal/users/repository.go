@@ -33,3 +33,27 @@ func (r *Repository) AddUser(ctx context.Context, user query.AddUserParams) (*qu
 
 	return &u, nil
 }
+
+//GetUser gets a User by ID
+func (r *Repository) GetUser(ctx context.Context, id int32) (*query.User, error) {
+	u, err := r.q.GetUser(ctx, id)
+
+	if err != nil {
+		r.log.Error("failed to get user", zap.Error(err))
+		return nil, err
+	}
+
+	return &u, nil
+}
+
+//VerifyEmail verifies an email
+func (r *Repository) VerifyEmail(ctx context.Context, id int32) (*query.User, error) {
+	u, err := r.q.VerifyEmail(ctx, id)
+
+	if err != nil {
+		r.log.Error("failed to verify email", zap.Error(err))
+		return nil, err
+	}
+
+	return &u, nil
+}

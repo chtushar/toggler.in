@@ -36,6 +36,7 @@ func (h *Handler) addUser() http.HandlerFunc {
 		ID 	 	int32 `json:"id"`
 		Name 	string `json:"name"`
 		Email string `json:"email"`
+		EmailVerified bool `json:"emailVerified"`
 		CreatedAt time.Time `json:"created_at"`
 		UpdatedAt time.Time `json:"updated_at"`
 	}
@@ -70,10 +71,21 @@ func (h *Handler) addUser() http.HandlerFunc {
 			return
 		}
 
+		// Send verification mail from here
+		// Temporarily setting email as verified
+		user, err = h.repository.VerifyEmail(r.Context(), user.ID)
+
+		if err != nil {
+			h.log.Error("Failed verifying email", zap.Error(err))
+			h.jsonWriter.DefaultError(w, r)
+			return
+		}
+
 		h.jsonWriter.Ok(w, r, &Response{
 			ID: user.ID,
 			Name: user.Name,
 			Email: user.Email,
+			EmailVerified: user.EmailVerified,
 			CreatedAt: user.CreatedAt,
 			UpdatedAt: user.UpdatedAt,
 		})

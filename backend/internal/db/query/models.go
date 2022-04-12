@@ -6,6 +6,13 @@ import (
 	"time"
 )
 
+type Team struct {
+	ID        int32     `db:"id"`
+	Name      string    `db:"name"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
+}
+
 type User struct {
 	ID            int32     `db:"id"`
 	Name          string    `db:"name"`
@@ -14,4 +21,11 @@ type User struct {
 	EmailVerified bool      `db:"email_verified"`
 	CreatedAt     time.Time `db:"created_at"`
 	UpdatedAt     time.Time `db:"updated_at"`
+}
+
+type UserTeam struct {
+	UserID    int32     `db:"user_id"`
+	TeamID    int32     `db:"team_id"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
 }

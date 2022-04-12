@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/stdlib"
 	"go.uber.org/zap"
 	"toggler.in/internal/configs"
 )
@@ -18,6 +19,40 @@ var (
 	once   sync.Once
 	dbConn *DB
 )
+
+//Setup runs the database migrations upto the current version
+func Setup(cfg *configs.App, logger *zap.Logger) error {
+	pgxConfig, err := getPgxConfig(cfg, logger)
+
+	if err != nil {
+		return err
+	}
+
+	err = runUpMigrations(stdlib.OpenDB(*pgxConfig), logger)
+	if err != nil {
+		logger.Error("failed to run migrations", zap.Error(err))
+		return err
+	}
+
+	return nil
+}
+
+//Down to run the down migrations
+func Down(ctx context.Context, cfg *configs.App, logger *zap.Logger) error {
+	connConfig, err := getPgxConfig(cfg, logger)
+	if err != nil {
+		return err
+	}
+
+	_, err = pgx.ConnectConfig(ctx, connConfig)
+	if err != nil {
+		logger.Error("Failed to connect to DB", zap.Error(err))
+		return fmt.Errorf("failed to connect to DB: %w", err)
+	}
+
+	//execute the .down.sql files
+	return runDownMigration(stdlib.OpenDB(*connConfig), logger)
+}
 
 // Creates a new connection to the database.
 func NewConnection(ctx context.Context,cfg *configs.App, logger *zap.Logger) (*DB, error) {

@@ -16,14 +16,14 @@ $BODY$;
 
 
 -- Users table
-create table IF NOT EXISTS users (
-  id            serial primary key not null,
-  name          varchar(255)       not null,
-  password      varchar(255)       not null,
-  email         varchar(255)       not null,
-  email_verified boolean            not null default false,
-  created_at    timestamp with time zone not null default now(),
-  updated_at    timestamp with time zone not null default now()
+CREATE TABLE IF NOT EXISTS users (
+  id            SERIAL PRIMARY KEY NOT NULL,
+  name          VARCHAR(255)       NOT NULL,
+  password      VARCHAR(255)       NOT NULL,
+  email         VARCHAR(255)       NOT NULL UNIQUE,
+  email_verified BOOLEAN            NOT NULL DEFAULT false,
+  created_at    TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  updated_at    TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
 -- Updated at trigger for users
@@ -33,3 +33,25 @@ CREATE TRIGGER set_updated_at_users
     FOR EACH ROW
 EXECUTE FUNCTION set_updated_at();
 
+-- Teams table
+CREATE TABLE IF NOT EXISTS teams (
+    id            SERIAL PRIMARY KEY NOT NULL,
+    name          VARCHAR(255)       NOT NULL,
+    created_at    TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+    updated_at    TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+);
+
+-- Updated at trigger for team
+CREATE TRIGGER set_updated_at_teams
+    BEFORE UPDATE
+    ON teams
+    FOR EACH ROW
+EXECUTE FUNCTION set_updated_at();
+
+-- Users teams junction table
+CREATE TABLE IF NOT EXISTS user_team (
+    user_id       INTEGER            NOT NULL,
+    team_id       INTEGER            NOT NULL,
+    created_at    TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+    updated_at    TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+);
