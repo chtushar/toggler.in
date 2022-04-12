@@ -1,13 +1,23 @@
 version: '3.8'
 
 services:
-  client:
-    build: ./client
+  postgres:
+    image: postgres:13.3
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
     ports:
-      - 3000:3000
+      - 5432:5432
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  backend:
+    build: ./backend
+    ports:
+      - ${PORT}:${PORT}
     depends_on:
-      - api
-  api:
-    build: ./api
-    ports:
-      - 9090:9090
+      postgres:
+        condition: service_healthy
