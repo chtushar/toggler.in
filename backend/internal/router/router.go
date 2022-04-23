@@ -2,8 +2,10 @@ package router
 
 import (
 	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 	"go.uber.org/zap"
 
+	"toggler.in/internal/auth"
 	"toggler.in/internal/db"
 	"toggler.in/internal/http/request"
 	"toggler.in/internal/http/response"
@@ -11,17 +13,30 @@ import (
 	"toggler.in/internal/validator"
 )
 
-func Routes(r *mux.Router, db *db.DB, log *zap.Logger,) {
+type Config struct {
+	R *mux.Router
+	DB 	 *db.DB
+	Log 	 *zap.Logger
+	CS 	 *sessions.CookieStore
+	JWTSecret string
+}
+
+func Routes(cfg *Config) {
 	// Validator instance
-	v := validator.New(log)
+	v := validator.New(cfg.Log)
 	// JSON writer instance
-	jw := response.NewJSONWriter(log)
+	jw := response.NewJSONWriter(cfg.Log)
 	// Request reader instance
-	reader := request.NewReader(log, jw, v)
+	reader := request.NewReader(cfg.Log, jw, v)
 
 	// User routes and handler
-	ur := users.NewRepository(db, log)
-	uh := users.NewHandler(log, reader, jw, ur)
-	users.UserRoutes(r, uh)
+	ur := users.NewRepository(cfg.DB, cfg.Log)
+	uh := users.NewHandler(cfg.Log, reader, jw, ur)
+	users.UserRoutes(cfg.R, uh)
+
+	// Auth routes and handler
+	ar := auth.NewRepository(cfg.DB, cfg.Log)
+	ah := auth.NewHandler(cfg.Log, reader, jw, ar, cfg.CS, cfg.JWTSecret)
+	auth.AuthRoutes(cfg.R, ah)
 
 }

@@ -34,6 +34,17 @@ func (r *Repository) AddUser(ctx context.Context, user query.AddUserParams) (*qu
 	return &u, nil
 }
 
+func (r *Repository) GetUserByEmail(ctx context.Context, email string) (*query.User, error) {
+	u, err := r.q.GetUserByEmail(ctx, email)
+
+	if err != nil {
+		r.log.Error("failed to get user by email", zap.Error(err))
+		return nil, err
+	}
+
+	return &u, nil
+}
+
 //GetUser gets a User by ID
 func (r *Repository) GetUser(ctx context.Context, id int32) (*query.User, error) {
 	u, err := r.q.GetUser(ctx, id)

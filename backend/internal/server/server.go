@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 	"go.uber.org/zap"
 	"toggler.in/internal/db"
 	"toggler.in/internal/http/handlers"
@@ -19,6 +20,7 @@ import (
 type Config struct {
 	Port int
 	Logger *zap.Logger
+	JWTSecret string
 }
 
 type Server struct {
@@ -28,7 +30,11 @@ type Server struct {
 
 	logger *zap.Logger
 
+	cookieStore *sessions.CookieStore
+
 	db *db.DB
+
+	JWTSecret string
 
 	connClose chan int
 }
@@ -45,6 +51,7 @@ func NewServer(cfg *Config, db *db.DB) *Server {
 		router: r,
 		db:     db,
 		connClose: make(chan int, 1),
+		JWTSecret: cfg.JWTSecret,
 	}
 }
 
@@ -66,7 +73,13 @@ func (s *Server) setup() {
 	defer s.graceFullShutdown()
 
 	apiRouter := s.router.PathPrefix("/").Subrouter()
-	router.Routes(apiRouter, s.db, s.logger)
+	router.Routes(&router.Config{
+		R: apiRouter,
+		DB: s.db,
+		Log: s.logger,
+		CS: s.cookieStore,
+		JWTSecret: s.JWTSecret,
+	})
 
 	// Add handlers and middlewares below this line
 	s.server.Handler = handlers.RecoveryHandler(s.logger)(s.server.Handler)

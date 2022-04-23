@@ -6,6 +6,11 @@ const (
 	// DefaultErrorCode - in case other codes are irrelevant
 	DefaultErrorCode ErrorCode = 500
 
+	// NotFound - 404
+	NotFound ErrorCode = 404
+	// Unauthorized - 401
+	Unauthorized ErrorCode = 401
+
 	// EmptyRequestBody - when the request body is empty
 	EmptyRequestBody ErrorCode = 1000
 	// InvalidJSON - when the json data in request in invalid

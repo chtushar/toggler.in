@@ -10,5 +10,5 @@ import (
 func UserRoutes(r *mux.Router, uh *Handler) {
 	r = r.PathPrefix("/users").Subrouter()
 
-	r.HandleFunc("", uh.addUser()).Methods(http.MethodPost)
+	r.HandleFunc("/signup", uh.addUser()).Methods(http.MethodPost)
 }
