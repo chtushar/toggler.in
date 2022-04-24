@@ -23,6 +23,8 @@ func Get() *App {
 			Enviroment: viper.GetString(keyEnv),
 			Production: isProduction(viper.GetString(keyEnv)),
 			JWTSecret: viper.GetString(keyJWTSecret),
+			SecureCookieHashKey: viper.GetString(keySecureCookieHashKey),
+			SecureCookieBlockKey: viper.GetString(keySecureCookieBlockKey),
 			DB: &DB{
 				Host: viper.GetString(keyDBHost),
 				Port: viper.GetInt(keyDBPort),

@@ -1,12 +1,9 @@
 package auth
 
 import (
-	"fmt"
 	"net/http"
-	"time"
 
-	"github.com/golang-jwt/jwt"
-	"github.com/gorilla/sessions"
+	"github.com/gorilla/securecookie"
 	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 	"toggler.in/internal/http/request"
@@ -19,13 +16,13 @@ type Handler struct {
 	reader     *request.Reader
 	jsonWriter *response.JSONWriter
 	repository *Repository
-	cookieStore *sessions.CookieStore
+	secureCookie *securecookie.SecureCookie
 	jwt 				*JWT
 }
 
 //NewHandler creates a new instance of Handler
-func NewHandler(log *zap.Logger, reader *request.Reader, jsonWriter *response.JSONWriter, repository *Repository, cookieStore *sessions.CookieStore, jwtSecret string) *Handler {
-	return &Handler{log: log, reader: reader, jsonWriter: jsonWriter, repository: repository, cookieStore: cookieStore, jwt: NewJWT(jwtSecret)}
+func NewHandler(log *zap.Logger, reader *request.Reader, jsonWriter *response.JSONWriter, repository *Repository, secureCookie *securecookie.SecureCookie, jwtSecret string) *Handler {
+	return &Handler{log: log, reader: reader, jsonWriter: jsonWriter, repository: repository, secureCookie: secureCookie, jwt: NewJWT(jwtSecret)}
 }
 
 
@@ -65,22 +62,32 @@ func (h *Handler) signin() http.HandlerFunc {
 			return
 		}
 
-		token :=	jwt.New(jwt.SigningMethodHS256)
-		claims := token.Claims.(jwt.MapClaims)
+		accessTokenData := map[string]interface{}{
+			KeyUserId: user.ID,
+			KeyUserEmail: user.Email,
+			KeyUserName: user.Name,
+		}
 
-		claims["id"] = user.ID
-		claims["name"] = user.Name
-		claims["email"] = user.Email
-		claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
-
-		tokenString, err := token.SignedString([]byte(h.jwt.Secret))
+		token, err :=	h.jwt.NewToken(AuthSecret, accessTokenData)
 
 		if err != nil {
 			h.log.Error("Failed to sign token", zap.Error(err))
 			return
 		}
 
-		fmt.Println(tokenString)
+		cookieCoded, err := h.secureCookie.Encode("auth", token)
+
+		if err != nil {
+			h.log.Error("Cookie coding error", zap.Error(err))
+			return
+		}
+
+		http.SetCookie(w, &http.Cookie{
+			Name:     "auth",
+			Value:    cookieCoded,
+			Path:     "/",
+			HttpOnly: true,
+		})
 
 		h.jsonWriter.Ok(w, r, &Response{
 			ID: user.ID,

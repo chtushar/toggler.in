@@ -10,10 +10,11 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/gorilla/sessions"
+	"github.com/gorilla/securecookie"
 	"go.uber.org/zap"
 	"toggler.in/internal/db"
 	"toggler.in/internal/http/handlers"
+	"toggler.in/internal/proxy"
 	"toggler.in/internal/router"
 )
 
@@ -21,6 +22,8 @@ type Config struct {
 	Port int
 	Logger *zap.Logger
 	JWTSecret string
+	SecureCookieHashKey string
+	SecureCookieBlockKey string
 }
 
 type Server struct {
@@ -30,7 +33,7 @@ type Server struct {
 
 	logger *zap.Logger
 
-	cookieStore *sessions.CookieStore
+	secureCookie *securecookie.SecureCookie
 
 	db *db.DB
 
@@ -52,6 +55,7 @@ func NewServer(cfg *Config, db *db.DB) *Server {
 		db:     db,
 		connClose: make(chan int, 1),
 		JWTSecret: cfg.JWTSecret,
+		secureCookie: proxy.NewSecureCookie([]byte(cfg.SecureCookieHashKey), []byte(cfg.SecureCookieBlockKey)),
 	}
 }
 
@@ -77,7 +81,7 @@ func (s *Server) setup() {
 		R: apiRouter,
 		DB: s.db,
 		Log: s.logger,
-		CS: s.cookieStore,
+		SC: s.secureCookie,
 		JWTSecret: s.JWTSecret,
 	})
 

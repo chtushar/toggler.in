@@ -9,4 +9,6 @@ const (
 	keyDBUser = "db.user"
 	keyDBPass = "db.password"
 	keyDBName = "db.name"
+	keySecureCookieHashKey = "secure_cookie_hash_key"
+	keySecureCookieBlockKey = "secure_cookie_block_key"
 )

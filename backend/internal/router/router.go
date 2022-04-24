@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/gorilla/sessions"
+	"github.com/gorilla/securecookie"
 	"go.uber.org/zap"
 
 	"toggler.in/internal/auth"
@@ -14,10 +14,10 @@ import (
 )
 
 type Config struct {
-	R *mux.Router
+	R 	 *mux.Router
 	DB 	 *db.DB
-	Log 	 *zap.Logger
-	CS 	 *sessions.CookieStore
+	Log  *zap.Logger
+	SC 	 *securecookie.SecureCookie
 	JWTSecret string
 }
 
@@ -36,7 +36,7 @@ func Routes(cfg *Config) {
 
 	// Auth routes and handler
 	ar := auth.NewRepository(cfg.DB, cfg.Log)
-	ah := auth.NewHandler(cfg.Log, reader, jw, ar, cfg.CS, cfg.JWTSecret)
+	ah := auth.NewHandler(cfg.Log, reader, jw, ar, cfg.SC, cfg.JWTSecret)
 	auth.AuthRoutes(cfg.R, ah)
 
 }

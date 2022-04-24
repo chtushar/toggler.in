@@ -18,6 +18,8 @@ type (
 		Enviroment string
 		Production bool
 		JWTSecret string
+		SecureCookieHashKey string
+		SecureCookieBlockKey string
  		DB *DB
 		Logger *Logger
 	}

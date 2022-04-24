@@ -27,6 +27,6 @@ func Execute() {
 	}
 
 	// Initializing the server.
-	srv := server.NewServer(&server.Config{Port: cfg.Port, Logger: log, JWTSecret: cfg.JWTSecret}, dbConn)
+	srv := server.NewServer(&server.Config{Port: cfg.Port, Logger: log, JWTSecret: cfg.JWTSecret, SecureCookieHashKey: cfg.SecureCookieHashKey, SecureCookieBlockKey: cfg.SecureCookieBlockKey}, dbConn)
 	srv.Listen()
 }
