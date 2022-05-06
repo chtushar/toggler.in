@@ -33,7 +33,7 @@ func (h *authenticationHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 }
 
 func (h *authenticationHandler) authenticate(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("authenticate")
+	fmt.Println("authentication test")
 }
 
 func (h *authenticationHandler) jsonResponse(w http.ResponseWriter, r *http.Request) {
