@@ -10,7 +10,7 @@ import (
 
 //Repository has CRUD functions for users
 type Repository struct {
-	q *query.Queries
+	q query.Querier
 	log *zap.Logger
 }
 

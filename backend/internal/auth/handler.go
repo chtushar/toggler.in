@@ -52,12 +52,12 @@ func (h *Handler) signin() http.HandlerFunc {
 		user, err := h.repository.GetUserByEmail(r.Context(),req.Email)
 
 		if err != nil {
-			h.log.Error("User doesn't exists", zap.Error(err))
+			h.log.Error("There was a problem logging you in", zap.Error(err))
 			h.jsonWriter.NotFound(w, r, &UserNotFoundError{})
 		}
 
 		if err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
-			h.log.Error("Password doesn't match", zap.Error(err))
+			h.log.Error("There was a problem logging you in", zap.Error(err))
 			h.jsonWriter.Unauthorized(w, r, &IncorrectPasswordError{})
 			return
 		}
@@ -72,6 +72,7 @@ func (h *Handler) signin() http.HandlerFunc {
 
 		if err != nil {
 			h.log.Error("Failed to sign token", zap.Error(err))
+				h.jsonWriter.Unauthorized(w, r, &IncorrectPasswordError{})
 			return
 		}
 
@@ -79,6 +80,7 @@ func (h *Handler) signin() http.HandlerFunc {
 
 		if err != nil {
 			h.log.Error("Cookie coding error", zap.Error(err))
+			h.jsonWriter.Unauthorized(w, r, &IncorrectPasswordError{})
 			return
 		}
 

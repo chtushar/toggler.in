@@ -32,6 +32,7 @@ func RecoveryHandler(log *zap.Logger) func(h http.Handler) http.Handler {
 	}
 }
 
+
 func (h *recoveryHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	defer h.recoverPanic(w, r)
 	h.handler.ServeHTTP(w, r)

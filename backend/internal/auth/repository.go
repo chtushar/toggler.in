@@ -9,7 +9,7 @@ import (
 )
 
 type Repository struct {
-	q *query.Queries
+	q query.Querier
 	log *zap.Logger
 }
 

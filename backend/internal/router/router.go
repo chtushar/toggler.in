@@ -5,12 +5,8 @@ import (
 	"github.com/gorilla/securecookie"
 	"go.uber.org/zap"
 
-	"toggler.in/internal/auth"
 	"toggler.in/internal/db"
-	"toggler.in/internal/http/request"
-	"toggler.in/internal/http/response"
-	"toggler.in/internal/users"
-	"toggler.in/internal/validator"
+	v1 "toggler.in/internal/router/v1"
 )
 
 type Config struct {
@@ -22,21 +18,11 @@ type Config struct {
 }
 
 func Routes(cfg *Config) {
-	// Validator instance
-	v := validator.New(cfg.Log)
-	// JSON writer instance
-	jw := response.NewJSONWriter(cfg.Log)
-	// Request reader instance
-	reader := request.NewReader(cfg.Log, jw, v)
-
-	// User routes and handler
-	ur := users.NewRepository(cfg.DB, cfg.Log)
-	uh := users.NewHandler(cfg.Log, reader, jw, ur)
-	users.UserRoutes(cfg.R, uh)
-
-	// Auth routes and handler
-	ar := auth.NewRepository(cfg.DB, cfg.Log)
-	ah := auth.NewHandler(cfg.Log, reader, jw, ar, cfg.SC, cfg.JWTSecret)
-	auth.AuthRoutes(cfg.R, ah)
-
+	v1.V1Route(&v1.Config{
+		R: cfg.R.PathPrefix("/v1").Subrouter(),
+		DB: cfg.DB,
+		Log: cfg.Log,
+		SC: cfg.SC,
+		JWTSecret: cfg.JWTSecret,
+	})
 }

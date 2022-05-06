@@ -76,7 +76,7 @@ func (s *Server) WaitForShutdown() {
 func (s *Server) setup() {
 	defer s.graceFullShutdown()
 
-	apiRouter := s.router.PathPrefix("/").Subrouter()
+	apiRouter := s.router.PathPrefix("/api").Subrouter()
 	router.Routes(&router.Config{
 		R: apiRouter,
 		DB: s.db,
@@ -86,7 +86,13 @@ func (s *Server) setup() {
 	})
 
 	// Add handlers and middlewares below this line
+	// - Recovery
+	// - Logging
+	// - CORS
+	// - Authentication
+	// - Authorization
 	s.server.Handler = handlers.RecoveryHandler(s.logger)(s.server.Handler)
+	s.server.Handler = handlers.Authenticate(s.server.Handler)
 }
 
 func (s *Server) graceFullShutdown() {
