@@ -5,15 +5,13 @@ import (
 	"regexp"
 	"runtime/debug"
 
-	"toggler.in/internal/http/response"
-
 	"go.uber.org/zap"
 )
 
 type recoveryHandler struct {
 	handler    http.Handler
 	log        *zap.Logger
-	jsonWriter *response.JSONWriter
+	// jsonWriter *response.JSONWriter
 	apiRegex   *regexp.Regexp
 }
 
@@ -47,21 +45,20 @@ func (h *recoveryHandler) recoverPanic(w http.ResponseWriter, r *http.Request) {
 	h.logPanic(r, err)
 
 	if h.apiRegex.MatchString(r.URL.Path) {
-		h.jsonResponse(w, r)
+		// h.jsonResponse(w, r)
 		return
 	}
 
-	h.htmlResponse(w, r)
+	// h.htmlResponse(w, r)
 }
 
-func (h *recoveryHandler) htmlResponse(w http.ResponseWriter, _ *http.Request) {
-	// TODO: Redirect to Internal Server error HTML page
-	w.WriteHeader(http.StatusInternalServerError)
-}
+// func (h *recoveryHandler) htmlResponse(w http.ResponseWriter, _ *http.Request) {
+// 	w.WriteHeader(http.StatusInternalServerError)
+// }
 
-func (h *recoveryHandler) jsonResponse(w http.ResponseWriter, r *http.Request) {
-	h.jsonWriter.DefaultError(w, r)
-}
+// func (h *recoveryHandler) jsonResponse(w http.ResponseWriter, r *http.Request) {
+// 	h.jsonWriter.DefaultError(w, r)
+// }
 
 func (h *recoveryHandler) logPanic(_ *http.Request, v interface{}) {
 	h.log.Error(

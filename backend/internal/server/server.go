@@ -92,7 +92,7 @@ func (s *Server) setup() {
 	// - Authentication
 	// - Authorization
 	s.server.Handler = handlers.RecoveryHandler(s.logger)(s.server.Handler)
-	s.server.Handler = handlers.Authenticate(s.server.Handler)
+	s.server.Handler = handlers.AuthenticationHandler(s.logger)(s.server.Handler)
 }
 
 func (s *Server) graceFullShutdown() {

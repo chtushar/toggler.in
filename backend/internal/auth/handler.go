@@ -6,8 +6,10 @@ import (
 	"github.com/gorilla/securecookie"
 	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
+	"toggler.in/internal/helpers"
 	"toggler.in/internal/http/request"
 	"toggler.in/internal/http/response"
+	"toggler.in/internal/proxy"
 )
 
 
@@ -17,14 +19,22 @@ type Handler struct {
 	jsonWriter *response.JSONWriter
 	repository *Repository
 	secureCookie *securecookie.SecureCookie
-	jwt 				*JWT
+	jwt 				*helpers.JWT
+}
+
+type Config struct {
+	Log 			*zap.Logger
+	Reader 		*request.Reader
+	JSONWriter 	*response.JSONWriter
+	Repository 	*Repository
+	SecureCookie *securecookie.SecureCookie
+	JWTSecret 	string
 }
 
 //NewHandler creates a new instance of Handler
-func NewHandler(log *zap.Logger, reader *request.Reader, jsonWriter *response.JSONWriter, repository *Repository, secureCookie *securecookie.SecureCookie, jwtSecret string) *Handler {
-	return &Handler{log: log, reader: reader, jsonWriter: jsonWriter, repository: repository, secureCookie: secureCookie, jwt: NewJWT(jwtSecret)}
+func NewHandler(cfg *Config) *Handler {
+	return &Handler{log: cfg.Log, reader: cfg.Reader, jsonWriter: cfg.JSONWriter, repository: cfg.Repository, secureCookie: cfg.SecureCookie, jwt: helpers.NewJWT(cfg.JWTSecret)}
 }
-
 
 
 func (h *Handler) signin() http.HandlerFunc {
@@ -62,34 +72,21 @@ func (h *Handler) signin() http.HandlerFunc {
 			return
 		}
 
-		accessTokenData := map[string]interface{}{
-			KeyUserId: user.ID,
-			KeyUserEmail: user.Email,
-			KeyUserName: user.Name,
-		}
-
-		token, err :=	h.jwt.NewToken(AuthSecret, accessTokenData)
-
-		if err != nil {
-			h.log.Error("Failed to sign token", zap.Error(err))
-				h.jsonWriter.Unauthorized(w, r, &IncorrectPasswordError{})
-			return
-		}
-
-		cookieCoded, err := h.secureCookie.Encode("auth", token)
+		err = proxy.SetAuthCookie(&proxy.AuthCookieConfig{
+			JWT: h.jwt,
+			SC:  h.secureCookie,
+			W:  &w,
+			User: map[string]interface{}{
+				helpers.KeyUserId: user.ID,
+				helpers.KeyUserName: user.Name,
+				helpers.KeyUserEmail: user.Email,
+		}})
 
 		if err != nil {
-			h.log.Error("Cookie coding error", zap.Error(err))
-			h.jsonWriter.Unauthorized(w, r, &IncorrectPasswordError{})
+			h.log.Error("There was a problem logging you in", zap.Error(err))
+				h.jsonWriter.BadRequest(w, r, &InternalError{})
 			return
 		}
-
-		http.SetCookie(w, &http.Cookie{
-			Name:     "auth",
-			Value:    cookieCoded,
-			Path:     "/",
-			HttpOnly: true,
-		})
 
 		h.jsonWriter.Ok(w, r, &Response{
 			ID: user.ID,
@@ -97,5 +94,12 @@ func (h *Handler) signin() http.HandlerFunc {
 			Email: user.Email,
 			EmailVerified: user.EmailVerified,
 		})
+	}
+}
+
+func (h *Handler) signout() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		proxy.ClearAuthCookie(&w)
+		h.jsonWriter.Ok(w, r, "OK")
 	}
 }

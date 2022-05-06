@@ -1,10 +1,9 @@
-package auth
+package helpers
 
 import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"toggler.in/internal/helpers"
 )
 
 type JWT struct {
@@ -48,6 +47,8 @@ func defaultClaim() jwt.MapClaims {
 	}
 }
 
+
+
 func buildClaim(tokenType *tokenType, m map[string]interface{}) jwt.MapClaims {
 	var mapClaim = defaultClaim()
 
@@ -56,7 +57,7 @@ func buildClaim(tokenType *tokenType, m map[string]interface{}) jwt.MapClaims {
 	}
 
 	mapClaim[KeyTokenType] = tokenType.TypeName
-	mapClaim[KeyExpiry] = helpers.UNIXTimestampFromNow(tokenType.ExpirationMinutes)
+	mapClaim[KeyExpiry] = UNIXTimestampFromNow(tokenType.ExpirationMinutes)
 
 	return mapClaim
 }

@@ -36,6 +36,13 @@ func V1Route(cfg *Config)  {
 
 	// Auth routes and handler
 	ar := auth.NewRepository(cfg.DB, cfg.Log)
-	ah := auth.NewHandler(cfg.Log, reader, jw, ar, cfg.SC, cfg.JWTSecret)
+	ah := auth.NewHandler(&auth.Config{
+		Log: cfg.Log,
+		Reader: reader,
+		JSONWriter: jw,
+		Repository: ar,
+		SecureCookie: cfg.SC,
+		JWTSecret: cfg.JWTSecret,
+	})
 	auth.AuthRoutes(cfg.R, ah)
 }
