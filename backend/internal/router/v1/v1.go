@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 	"toggler.in/internal/auth"
 	"toggler.in/internal/db"
+	"toggler.in/internal/helpers"
 	"toggler.in/internal/http/request"
 	"toggler.in/internal/http/response"
 	"toggler.in/internal/users"
@@ -17,7 +18,7 @@ type Config struct {
 	DB 	 *db.DB
 	Log  *zap.Logger
 	SC 	 *securecookie.SecureCookie
-	JWTSecret string
+	JWT  *helpers.JWT
 }
 
 func V1Route(cfg *Config)  {
@@ -42,7 +43,7 @@ func V1Route(cfg *Config)  {
 		JSONWriter: jw,
 		Repository: ar,
 		SecureCookie: cfg.SC,
-		JWTSecret: cfg.JWTSecret,
+		JWT: cfg.JWT,
 	})
 	auth.AuthRoutes(cfg.R, ah)
 }
