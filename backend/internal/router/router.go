@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 
 	"toggler.in/internal/db"
+	"toggler.in/internal/helpers"
 	v1 "toggler.in/internal/router/v1"
 )
 
@@ -14,7 +15,7 @@ type Config struct {
 	DB 	 *db.DB
 	Log  *zap.Logger
 	SC 	 *securecookie.SecureCookie
-	JWTSecret string
+	JWT *helpers.JWT
 }
 
 func Routes(cfg *Config) {
@@ -23,6 +24,6 @@ func Routes(cfg *Config) {
 		DB: cfg.DB,
 		Log: cfg.Log,
 		SC: cfg.SC,
-		JWTSecret: cfg.JWTSecret,
+		JWT: cfg.JWT,
 	})
 }

@@ -43,6 +43,7 @@ func SetAuthCookie(cfg *AuthCookieConfig) error {
 	return nil
 }
 
+
 func ClearAuthCookie(w *http.ResponseWriter) error {
 	c := &http.Cookie{
     Name:     "auth",
@@ -54,6 +55,32 @@ func ClearAuthCookie(w *http.ResponseWriter) error {
 	}
 
 	http.SetCookie(*w, c)
+
+	return nil
+}
+
+func ValidateAuthCookie(w *http.ResponseWriter, r *http.Request, sc *securecookie.SecureCookie, jwt *helpers.JWT) error {
+
+	cookie, err := r.Cookie("auth");
+
+
+	if err != nil {
+		return err
+	}
+
+	var decodedCookieValue string;
+	err = sc.Decode("auth", cookie.Value, &decodedCookieValue)
+
+	if err != nil {
+		return err
+	}
+
+
+	_, err = jwt.ReadTokenAndValidate(decodedCookieValue)
+
+	if err != nil  {
+		return err
+	}
 
 	return nil
 }

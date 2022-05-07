@@ -13,6 +13,7 @@ import (
 	"github.com/gorilla/securecookie"
 	"go.uber.org/zap"
 	"toggler.in/internal/db"
+	"toggler.in/internal/helpers"
 	"toggler.in/internal/http/handlers"
 	"toggler.in/internal/proxy"
 	"toggler.in/internal/router"
@@ -37,7 +38,7 @@ type Server struct {
 
 	db *db.DB
 
-	JWTSecret string
+	JWT *helpers.JWT
 
 	connClose chan int
 }
@@ -54,7 +55,7 @@ func NewServer(cfg *Config, db *db.DB) *Server {
 		router: r,
 		db:     db,
 		connClose: make(chan int, 1),
-		JWTSecret: cfg.JWTSecret,
+		JWT: helpers.NewJWT(cfg.JWTSecret),
 		secureCookie: proxy.NewSecureCookie([]byte(cfg.SecureCookieHashKey), []byte(cfg.SecureCookieBlockKey)),
 	}
 }
@@ -82,17 +83,18 @@ func (s *Server) setup() {
 		DB: s.db,
 		Log: s.logger,
 		SC: s.secureCookie,
-		JWTSecret: s.JWTSecret,
+		JWT: s.JWT,
 	})
 
 	// Add handlers and middlewares below this line
+	// TODO: Add logger handler
 	// - Recovery
 	// - Logging
 	// - CORS
 	// - Authentication
 	// - Authorization
 	s.server.Handler = handlers.RecoveryHandler(s.logger)(s.server.Handler)
-	s.server.Handler = handlers.AuthenticationHandler(s.logger)(s.server.Handler)
+	s.server.Handler = handlers.AuthenticationHandler(s.logger, s.secureCookie, s.JWT)(s.server.Handler)
 }
 
 func (s *Server) graceFullShutdown() {

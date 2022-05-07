@@ -28,12 +28,12 @@ type Config struct {
 	JSONWriter 	*response.JSONWriter
 	Repository 	*Repository
 	SecureCookie *securecookie.SecureCookie
-	JWTSecret 	string
+	JWT 					*helpers.JWT
 }
 
 //NewHandler creates a new instance of Handler
 func NewHandler(cfg *Config) *Handler {
-	return &Handler{log: cfg.Log, reader: cfg.Reader, jsonWriter: cfg.JSONWriter, repository: cfg.Repository, secureCookie: cfg.SecureCookie, jwt: helpers.NewJWT(cfg.JWTSecret)}
+	return &Handler{log: cfg.Log, reader: cfg.Reader, jsonWriter: cfg.JSONWriter, repository: cfg.Repository, secureCookie: cfg.SecureCookie, jwt: cfg.JWT}
 }
 
 
