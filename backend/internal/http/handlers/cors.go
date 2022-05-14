@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
+	"github.com/rs/cors"
 	"go.uber.org/zap"
 )
 
@@ -13,9 +13,17 @@ type corsHandler struct {
 }
 
 func CORSHandler(log *zap.Logger) func(h http.Handler) http.Handler {
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"http://localhost:3000"},
+		AllowedMethods: []string{"GET", "POST", "DELETE", "OPTIONS"},
+		AllowedHeaders: []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+		Debug: true,
+	})
+
 	return func(h http.Handler) http.Handler {
 		ch := &corsHandler{
-			handler: h,
+			handler: c.Handler(h),
 			log: log,
 		}
 
@@ -24,15 +32,5 @@ func CORSHandler(log *zap.Logger) func(h http.Handler) http.Handler {
 }
 
 func (h *corsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)  {
-	defer h.checkCorsHeaders(w, r)
-}
-
-func (h *corsHandler) checkCorsHeaders(w http.ResponseWriter, r *http.Request) {
-		fmt.Println(r.URL.Path, r.Method)
-		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
-		w.Header().Add("Access-Control-Allow-Credentials", "true")
-		w.Header().Add("Access-Control-Allow-Headers", "Content-Type,Authorization")
-		w.Header().Set("Access-Control-Allow-Methods", "OPTIONS,GET,POST,DELETE")
-		w.Header().Set("Access-Control-Max-Age", "86400")
-		h.handler.ServeHTTP(w, r)
+	h.handler.ServeHTTP(w, r)
 }

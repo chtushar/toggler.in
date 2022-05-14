@@ -17,16 +17,14 @@ const Dashboard = () => {
 
 export const getServerSideProps = async (ctx: any) => {
   try {
-    const data = await requests.post('/api/flag', undefined, {
-      headers: ctx?.req?.headers?.cookie
-        ? { cookie: ctx.req.headers.cookie }
-        : undefined,
-    });
+    // const data = await requests.post('/api/flag', undefined, {
+    //   headers: ctx?.req?.headers?.cookie
+    //     ? { cookie: ctx.req.headers.cookie }
+    //     : undefined,
+    // });
 
     return {
-      props: {
-        data,
-      },
+      props: {},
     };
   } catch (error) {
     return {

@@ -1,6 +1,7 @@
+import React from 'react';
 import { styled } from '../stitches.config';
 
-export const Text = styled('span', {
+const config = {
   lineHeight: '1',
   margin: '0',
   fontWeight: 400,
@@ -78,4 +79,7 @@ export const Text = styled('span', {
       },
     },
   },
-});
+};
+
+export const Text = styled('span', config);
+export const Label = styled('label', config);

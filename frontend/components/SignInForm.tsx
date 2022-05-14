@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 
-import { Flex, Button, TextField, Text } from '../ds';
+import { Flex, Button, TextField, Label } from '../ds';
 import useAuth from '../requests/useAuth';
 import { signInFormSchema } from '../utils/validation';
 
@@ -25,9 +25,9 @@ const SignInForm = () => {
     <form onSubmit={handleSubmit}>
       <Flex direction='column' gap='8'>
         <Flex direction='column' gap='2'>
-          <Text as='label' size={18} weight='semiBold' htmlFor='email'>
+          <Label size={18} weight='semiBold' htmlFor='email'>
             Work Email:
-          </Text>
+          </Label>
           <TextField
             type='email'
             name='email'
@@ -37,9 +37,9 @@ const SignInForm = () => {
           />
         </Flex>
         <Flex direction='column' gap='2'>
-          <Text as='label' size={18} weight='semiBold' htmlFor='password'>
+          <Label size={18} weight='semiBold' htmlFor='password'>
             Password
-          </Text>
+          </Label>
           <TextField
             type='password'
             name='password'

@@ -7,6 +7,6 @@ export { FieldSet } from './FieldSet';
 export { Grid } from './Grid';
 export { Icon } from './Icon';
 export { Select } from './Select';
-export { Text } from './Text';
+export { Text, Label } from './Text';
 export { TextArea } from './TextArea';
 export { TextField } from './TextField';
