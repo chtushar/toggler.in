@@ -21,8 +21,11 @@ type authenticationHandler struct {
 
 var whiteList = [][2]string {
 	{"/api/v1/auth/signin", "POST"},
+	{"/api/v1/auth/signin", "OPTIONS"}, // OPTIONS is used by CORS
 	{"/api/v1/auth/signout", "POST"},
+	{"/api/v1/auth/signout", "OPTIONS"}, // OPTIONS is used by CORS
 	{"/api/v1/users/signup", "POST"},
+	{"/api/v1/users/signup", "OPTIONS"}, // OPTIONS is used by CORS
 }
 
 func AuthenticationHandler(log *zap.Logger, sc *securecookie.SecureCookie, jwt *helpers.JWT) func(h http.Handler) http.Handler  {
@@ -43,7 +46,7 @@ func (h *authenticationHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 }
 
 func (h *authenticationHandler) authenticate(w http.ResponseWriter, r *http.Request) {
-
+	// fmt.Println(r.URL.Path, r.Method)
 	for _, white := range whiteList {
 		if r.URL.Path == white[0] && r.Method == white[1] {
 			h.handler.ServeHTTP(w, r)

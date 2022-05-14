@@ -94,6 +94,7 @@ func (s *Server) setup() {
 	// - Authentication
 	// - Authorization
 	s.server.Handler = handlers.RecoveryHandler(s.logger)(s.server.Handler)
+	s.server.Handler = handlers.CORSHandler(s.logger)(s.server.Handler)
 	s.server.Handler = handlers.AuthenticationHandler(s.logger, s.secureCookie, s.JWT)(s.server.Handler)
 }
 
