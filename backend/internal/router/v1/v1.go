@@ -31,11 +31,19 @@ func V1Route(cfg *Config)  {
 	reader := request.NewReader(cfg.Log, jw, v)
 
 	// User routes and handler
+	usersRoute(cfg, reader, jw)
+
+	// Auth routes and handler
+	authRoutes(cfg, reader, jw)
+}
+
+func usersRoute(cfg *Config, reader *request.Reader, jw *response.JSONWriter) {
 	ur := users.NewRepository(cfg.DB, cfg.Log)
 	uh := users.NewHandler(cfg.Log, reader, jw, ur)
 	users.UserRoutes(cfg.R, uh)
+}
 
-	// Auth routes and handler
+func authRoutes(cfg *Config, reader *request.Reader, jw *response.JSONWriter) {
 	ar := auth.NewRepository(cfg.DB, cfg.Log)
 	ah := auth.NewHandler(&auth.Config{
 		Log: cfg.Log,
