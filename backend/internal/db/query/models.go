@@ -3,12 +3,45 @@
 package query
 
 import (
+	"database/sql"
 	"time"
+
+	"github.com/google/uuid"
 )
+
+type FeatureFlag struct {
+	ID        int32         `db:"id"`
+	Uuid      uuid.NullUUID `db:"uuid"`
+	Name      string        `db:"name"`
+	Type      int32         `db:"type"`
+	TeamID    int32         `db:"team_id"`
+	CreatedAt time.Time     `db:"created_at"`
+	UpdatedAt time.Time     `db:"updated_at"`
+}
+
+type FeatureFlagType struct {
+	ID   int32  `db:"id"`
+	Type string `db:"type"`
+}
+
+type FfResolutionBoolean struct {
+	ID      int64        `db:"id"`
+	Key     string       `db:"key"`
+	FfID    int32        `db:"ff_id"`
+	Enabled sql.NullBool `db:"enabled"`
+}
 
 type Team struct {
 	ID        int32     `db:"id"`
 	Name      string    `db:"name"`
+	OwnerID   int32     `db:"owner_id"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
+}
+
+type TeamMember struct {
+	UserID    int32     `db:"user_id"`
+	TeamID    int32     `db:"team_id"`
 	CreatedAt time.Time `db:"created_at"`
 	UpdatedAt time.Time `db:"updated_at"`
 }
@@ -21,11 +54,4 @@ type User struct {
 	EmailVerified bool      `db:"email_verified"`
 	CreatedAt     time.Time `db:"created_at"`
 	UpdatedAt     time.Time `db:"updated_at"`
-}
-
-type UserTeam struct {
-	UserID    int32     `db:"user_id"`
-	TeamID    int32     `db:"team_id"`
-	CreatedAt time.Time `db:"created_at"`
-	UpdatedAt time.Time `db:"updated_at"`
 }

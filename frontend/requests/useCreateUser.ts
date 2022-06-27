@@ -5,8 +5,7 @@ import { queryClient } from '../utils/requestClient';
 import { requests } from '../utils/requests';
 
 interface CreateUserRequestBody {
-  firstName?: string;
-  lastName?: string;
+  name?: string;
   email?: string;
   password?: string;
 }
@@ -24,12 +23,15 @@ const useCreateUser = () => {
   const router = useRouter();
   const mutation = useMutation(
     ({
-      firstName,
-      lastName,
+      name,
       email,
       password,
     }: CreateUserRequestBody): Promise<CreateUserResponseBody> =>
-      requests.post('/api/user', { firstName, lastName, email, password }),
+      requests.post('v1/users/signup', {
+        name,
+        email,
+        password,
+      }),
     {
       onSuccess: (response) => {
         queryClient.setQueryData<CreateUserResponseBody['user']>(

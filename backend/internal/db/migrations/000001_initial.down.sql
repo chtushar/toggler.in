@@ -1,10 +1,16 @@
-drop trigger if exists set_updated_at_users on users cascade;
+DROP TRIGGER IF EXISTS set_updated_at_users ON users CASCADE;
 
-drop table if exists users cascade;
+DROP TABLE IF EXISTS users CASCADE;
 
-drop trigger if exists set_updated_at_teams on team cascade;
+DROP TRIGGER IF EXISTS set_updated_at_teams ON team CASCADE;
 
-drop table if exists team cascade;
+DROP TABLE IF EXISTS teams CASCADE;
 
-drop table if exists user_team;
+DROP TABLE IF EXISTS team_members;
+
+DROP TABLE IF EXISTS ff_resolution_boolean;
+
+DROP TABLE IF EXISTS feature_flags;
+
+DROP TABLE IF EXISTS feature_flag_types;
 

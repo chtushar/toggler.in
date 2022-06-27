@@ -10,11 +10,13 @@ interface SignInUserRequestBody {
 }
 
 interface SignInUserResponseBody {
-  user: {
+  data: {
     id?: string;
-    firstName?: string;
-    lastName?: string;
+    name?: string;
     email?: string;
+    emailVerified?: boolean;
+    created_at?: string;
+    updated_at?: string;
   };
 }
 
@@ -25,13 +27,13 @@ const useAuth = () => {
       email,
       password,
     }: SignInUserRequestBody): Promise<SignInUserResponseBody> =>
-      requests.post('/api/auth/login', { email, password }),
+      requests.post('v1/auth/signin', { email, password }),
     {
       onSuccess: (response) => {
-        queryClient.setQueryData<SignInUserResponseBody['user']>(
+        queryClient.setQueryData<SignInUserResponseBody['data']>(
           queryKeys.user,
           () => {
-            return { ...response.user };
+            return { ...response.data };
           },
         );
         router.replace('/dashboard');
@@ -39,7 +41,7 @@ const useAuth = () => {
     },
   );
 
-  const signOut = useMutation(() => requests.get('/api/auth/logout'), {
+  const signOut = useMutation(() => requests.get('v1/auth/signout'), {
     onSuccess: () => {
       queryClient.clear();
       router.replace('/');

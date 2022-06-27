@@ -1,10 +1,9 @@
 import { styled } from '../stitches.config';
 
 export const Grid = styled('div', {
-  position: 'relative',
   boxSizing: 'border-box',
   display: 'grid',
-  width: '100%',
+
   variants: {
     align: {
       start: {
@@ -99,9 +98,6 @@ export const Grid = styled('div', {
       9: {
         gap: '$9',
       },
-      10: {
-        gap: '$10',
-      },
     },
     gapX: {
       1: {
@@ -131,9 +127,6 @@ export const Grid = styled('div', {
       9: {
         columnGap: '$9',
       },
-      10: {
-        gap: '$10',
-      },
     },
     gapY: {
       1: {
@@ -162,9 +155,6 @@ export const Grid = styled('div', {
       },
       9: {
         rowGap: '$9',
-      },
-      10: {
-        gap: '$10',
       },
     },
   },
