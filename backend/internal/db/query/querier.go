@@ -9,7 +9,7 @@ import (
 type Querier interface {
 	AddTeamMember(ctx context.Context, arg AddTeamMemberParams) (TeamMember, error)
 	AddUser(ctx context.Context, arg AddUserParams) (User, error)
-	CreateTeam(ctx context.Context, arg CreateTeamParams) (Team, error)
+	CreateTeam(ctx context.Context, arg CreateTeamParams) (CreateTeamRow, error)
 	GetTeam(ctx context.Context, id int32) (Team, error)
 	GetTeamMembers(ctx context.Context, teamID int32) ([]TeamMember, error)
 	GetUser(ctx context.Context, id int32) (User, error)

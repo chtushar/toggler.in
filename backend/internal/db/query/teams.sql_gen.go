@@ -5,6 +5,7 @@ package query
 
 import (
 	"context"
+	"time"
 )
 
 const addTeamMember = `-- name: AddTeamMember :one
@@ -31,9 +32,14 @@ func (q *Queries) AddTeamMember(ctx context.Context, arg AddTeamMemberParams) (T
 }
 
 const createTeam = `-- name: CreateTeam :one
-INSERT INTO teams (name, owner_id)
-VALUES ($1, $2)
-RETURNING id, name, owner_id, created_at, updated_at
+WITH team as (
+	INSERT INTO teams (name, owner_id) VALUES ($1, $2)
+	RETURNING id, name, owner_id, created_at, updated_at
+), team_member as (
+	INSERT INTO team_members (user_id, team_id) VALUES ($2, (SELECT id from team))
+	RETURNING user_id, team_id, created_at, updated_at
+)
+SELECT id, name, owner_id, created_at, updated_at FROM team
 `
 
 type CreateTeamParams struct {
@@ -41,9 +47,17 @@ type CreateTeamParams struct {
 	OwnerID int32  `db:"owner_id"`
 }
 
-func (q *Queries) CreateTeam(ctx context.Context, arg CreateTeamParams) (Team, error) {
+type CreateTeamRow struct {
+	ID        int32     `db:"id"`
+	Name      string    `db:"name"`
+	OwnerID   int32     `db:"owner_id"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
+}
+
+func (q *Queries) CreateTeam(ctx context.Context, arg CreateTeamParams) (CreateTeamRow, error) {
 	row := q.db.QueryRow(ctx, createTeam, arg.Name, arg.OwnerID)
-	var i Team
+	var i CreateTeamRow
 	err := row.Scan(
 		&i.ID,
 		&i.Name,

@@ -9,6 +9,7 @@ import (
 	"toggler.in/internal/helpers"
 	"toggler.in/internal/http/request"
 	"toggler.in/internal/http/response"
+	"toggler.in/internal/teams"
 	"toggler.in/internal/users"
 	"toggler.in/internal/validator"
 )
@@ -33,6 +34,9 @@ func V1Route(cfg *Config)  {
 	// User routes and handler
 	usersRoute(cfg, reader, jw)
 
+	// Teams routes and handler
+	teamsRoute(cfg, reader, jw)
+
 	// Auth routes and handler
 	authRoutes(cfg, reader, jw)
 }
@@ -41,6 +45,12 @@ func usersRoute(cfg *Config, reader *request.Reader, jw *response.JSONWriter) {
 	ur := users.NewRepository(cfg.DB, cfg.Log)
 	uh := users.NewHandler(cfg.Log, reader, jw, ur)
 	users.UserRoutes(cfg.R, uh)
+}
+
+func teamsRoute(cfg *Config, reader *request.Reader, jw *response.JSONWriter) {
+	tr := teams.NewRepository(cfg.DB, cfg.Log)
+	th := teams.NewHandler(cfg.Log, reader, jw, tr)
+	teams.TeamRoutes(cfg.R, th)
 }
 
 func authRoutes(cfg *Config, reader *request.Reader, jw *response.JSONWriter) {
@@ -55,3 +65,4 @@ func authRoutes(cfg *Config, reader *request.Reader, jw *response.JSONWriter) {
 	})
 	auth.AuthRoutes(cfg.R, ah)
 }
+

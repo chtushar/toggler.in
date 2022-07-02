@@ -46,6 +46,8 @@ func (h *Handler) addUser() http.HandlerFunc {
 		ok := h.reader.ReadJSONAndValidate(w, r, req)
 
 		if !ok {
+			h.log.Error("Error while validating fields")
+			h.jsonWriter.Internal(w, r, &InternalError{})
 			return
 		}
 

@@ -21,7 +21,7 @@ func NewRepository (db *db.DB, log *zap.Logger) *Repository {
 }
 
 // AddTeam adds a new Team
-func (r *Repository) CreateTeam(ctx context.Context, team query.CreateTeamParams) (*query.Team, error) {
+func (r *Repository) CreateTeam(ctx context.Context, team query.CreateTeamParams) (*query.CreateTeamRow, error) {
 	t, err := r.q.CreateTeam(ctx, team)
 
 	if err != nil {
@@ -31,3 +31,8 @@ func (r *Repository) CreateTeam(ctx context.Context, team query.CreateTeamParams
 
 	return &t, nil
 }
+
+// // Add team member
+// func (r *Repository) AddTeamMember(ctx context.Context, team query.AddTeamMemberParams) (*query.TeamMember, error) {
+// 	t, err := r.q.
+// }
