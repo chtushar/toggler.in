@@ -24,12 +24,12 @@ const LayoutWrapper = styled('div', {
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <LayoutWrapper>
+    <div>
       <Head>
         <title>Toggler</title>
       </Head>
       {children}
-    </LayoutWrapper>
+    </div>
   );
 };
 

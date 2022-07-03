@@ -1,6 +1,5 @@
 import { useFormik } from 'formik';
 
-import { Flex, Button, TextField, Label } from '../ds';
 import useAuth from '../requests/useAuth';
 import { signInFormSchema } from '../utils/validation';
 
@@ -23,39 +22,31 @@ const SignInForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Flex direction='column' gap='8'>
-        <Flex direction='column' gap='2'>
-          <Label size={18} weight='semiBold' htmlFor='email'>
-            Work Email:
-          </Label>
-          <TextField
+      <div>
+        <div>
+          <label htmlFor='email'>Work Email:</label>
+          <input
             type='email'
             name='email'
             placeholder='Your work email'
             onChange={handleChange}
             value={values.email}
           />
-        </Flex>
-        <Flex direction='column' gap='2'>
-          <Label size={18} weight='semiBold' htmlFor='password'>
-            Password
-          </Label>
-          <TextField
+        </div>
+        <div>
+          <label htmlFor='password'>Password</label>
+          <input
             type='password'
             name='password'
             placeholder='*****'
             onChange={handleChange}
             value={values.password}
           />
-        </Flex>
-        <Button
-          appearance='primary'
-          type='submit'
-          disabled={isSubmitButtonDisabled}
-        >
+        </div>
+        <button type='submit' disabled={isSubmitButtonDisabled}>
           Sign in to toggler.in
-        </Button>
-      </Flex>
+        </button>
+      </div>
     </form>
   );
 };

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useMutation, UseMutationResult } from 'react-query';
+import { useMutation } from 'react-query';
 import { queryKeys } from '../constants/queryKeys';
 import { queryClient } from '../utils/requestClient';
 import { requests } from '../utils/requests';
@@ -11,12 +11,16 @@ interface CreateUserRequestBody {
 }
 
 interface CreateUserResponseBody {
+  timestamp: string;
+  uri: string;
+  success: boolean;
   user: {
     id?: string;
     firstName?: string;
     lastName?: string;
     email?: string;
-  };
+  } | null;
+  error: {} | null;
 }
 
 const useCreateUser = () => {

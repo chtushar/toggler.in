@@ -81,5 +81,23 @@ const config = {
   },
 };
 
-export const Text = styled('span', config);
+const StyledText = styled('span', config);
+
+export interface TextProps {
+  as?: React.ElementType;
+}
+export const Text = (props: {
+  as: React.ElementType;
+  children: React.ReactNode;
+  size?: keyof typeof config['variants']['size'];
+  color?: keyof typeof config['variants']['color'];
+  weight?: keyof typeof config['variants']['weight'];
+}) => {
+  const { as = 'div', children, ...rest } = props;
+  return (
+    <StyledText as={as} {...rest}>
+      {children}
+    </StyledText>
+  );
+};
 export const Label = styled('label', config);
