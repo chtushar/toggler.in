@@ -1,32 +1,41 @@
 {
-  "name": "client",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@radix-ui/colors": "^0.1.8",
-    "@radix-ui/react-dialog": "^0.1.5",
-    "@stitches/react": "^1.2.8",
-    "axios": "^0.24.0",
-    "downshift": "^6.1.7",
-    "formik": "^2.2.9",
-    "next": "^12.2.0",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "react-query": "^3.34.8",
-    "remixicon": "^2.5.0",
-    "yup": "^0.32.11"
-  },
-  "devDependencies": {
-    "@types/node": "17.0.8",
-    "@types/react": "17.0.38",
-    "eslint": "8.6.0",
-    "eslint-config-next": "12.0.8",
-    "typescript": "4.5.4"
-  }
+	"name": "frontend",
+	"version": "0.0.1",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"package": "svelte-kit package",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync",
+		"check": "svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --check --plugin-search-dir=. . && eslint .",
+		"format": "prettier --write --plugin-search-dir=. ."
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "next",
+		"@sveltejs/kit": "next",
+		"@types/cookie": "^0.5.1",
+		"@typescript-eslint/eslint-plugin": "^5.27.0",
+		"@typescript-eslint/parser": "^5.27.0",
+		"autoprefixer": "^10.4.7",
+		"eslint": "^8.16.0",
+		"eslint-config-prettier": "^8.3.0",
+		"eslint-plugin-svelte3": "^4.0.0",
+		"postcss": "^8.4.14",
+		"prettier": "^2.6.2",
+		"prettier-plugin-svelte": "^2.7.0",
+		"svelte": "^3.46.0",
+		"svelte-check": "^2.7.1",
+		"svelte-preprocess": "^4.10.7",
+		"tailwindcss": "^3.1.6",
+		"tslib": "^2.3.1",
+		"typescript": "^4.7.4",
+		"vite": "^3.0.0"
+	},
+	"type": "module",
+	"dependencies": {
+		"@fontsource/fira-mono": "^4.5.0",
+		"cookie": "^0.4.1"
+	}
 }
