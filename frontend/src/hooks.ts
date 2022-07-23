@@ -21,3 +21,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	return response;
 };
+
+export const getContext = async ({ event, resolve }) => {
+	const cookies = cookie.parse(event.request.headers.get('cookie') || '');
+	console.log(cookies);
+	const response = await resolve(event);
+
+	return response;
+};
