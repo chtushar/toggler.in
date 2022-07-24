@@ -12,6 +12,7 @@ type AuthCookieConfig struct {
 	JWT 	*helpers.JWT
 	SC    *securecookie.SecureCookie
 	W 		*http.ResponseWriter
+	R 		*http.Request
 	User 	map[string]interface{}
 }
 
@@ -32,6 +33,15 @@ func SetAuthCookie(cfg *AuthCookieConfig) error {
 	if err != nil {
 		return err
 	}
+
+	cookie := &http.Cookie{
+			Name:     "auth",
+			Value:    cookieCoded,
+			Path:     "/",
+			HttpOnly: true,
+	}
+
+	cfg.R.AddCookie(cookie)
 
 	http.SetCookie(*cfg.W, &http.Cookie{
 			Name:     "auth",

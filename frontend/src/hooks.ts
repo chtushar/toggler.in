@@ -5,6 +5,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const cookies = cookie.parse(event.request.headers.get('cookie') || '');
 	event.locals.userid = cookies['userid'] || crypto.randomUUID();
 
+	console.log(cookies);
+
 	const response = await resolve(event);
 
 	if (!cookies['userid']) {
@@ -18,14 +20,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 			})
 		);
 	}
-
-	return response;
-};
-
-export const getContext = async ({ event, resolve }) => {
-	const cookies = cookie.parse(event.request.headers.get('cookie') || '');
-	console.log(cookies);
-	const response = await resolve(event);
 
 	return response;
 };

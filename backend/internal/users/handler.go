@@ -93,3 +93,14 @@ func (h *Handler) addUser() http.HandlerFunc {
 		})
 	}
 }
+
+func (h *Handler) getUser() http.HandlerFunc {
+	type Response struct {
+		Msg string `json:"msg"`
+	}
+	return func(w http.ResponseWriter, r *http.Request) {
+		h.jsonWriter.Ok(w, r, &Response{
+			Msg: "ok",
+		})
+	}
+}

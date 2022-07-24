@@ -76,6 +76,7 @@ func (h *Handler) signin() http.HandlerFunc {
 			JWT: h.jwt,
 			SC:  h.secureCookie,
 			W:  &w,
+			R: r,
 			User: map[string]interface{}{
 				helpers.KeyUserId: user.ID,
 				helpers.KeyUserName: user.Name,
